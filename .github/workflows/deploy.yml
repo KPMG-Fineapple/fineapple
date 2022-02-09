@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  deploy_1:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: server deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_SERVER_PWD  }}
+          port: ${{ secrets.SSH_SERVER_PORT  }}
+          script: |
+            cd ${{ secrets.SSH_SERVER_REPOSITORY }}
+            git fetch origin main && git reset --hard origin/main
+            npm install
+            npm run build
+            pm2 delete server
+            npm run deploy
+  deploy_2:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: client deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_SERVER_PWD }}
+          port: ${{ secrets.SSH_SERVER_PORT }}
+          script: |
+            cd ${{ secrets.SSH_CLIENT_REPOSITORY }}
+            git fetch origin main && git reset --hard origin/main
+            npm install
+            npm run build
+            pm2 delete client
+            npm run deploy
