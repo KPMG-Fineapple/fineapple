@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { Box, Container, Grid } from "@mui/material";
-import { TrafficByDevice } from "../../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { Chart } from "src/components/dashboard/chart";
+import { CustomBarChart } from "src/components/dashboard/bar-chart";
 
 const Dashboard = () => (
   <>
@@ -25,7 +25,7 @@ const Dashboard = () => (
             <Chart />
           </Grid>
           <Grid item lg={4} md={4} xl={4} xs={12}>
-            <TrafficByDevice sx={{ height: "100%" }} />
+            <CustomBarChart />
           </Grid>
           <Grid item lg={8} md={12} xl={9} xs={12}>
             <Chart />
