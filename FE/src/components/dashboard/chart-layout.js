@@ -9,23 +9,23 @@ import {
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export const ChartLayout = (props) => {
-  const { children, allowToggleBtn, title, changeViewMode, viewMode } = props;
+  const { children, allowtoggle, title, changeviewmode, viewmode } = props;
 
   return (
     <Card {...props}>
       <CardHeader
         action={
-          allowToggleBtn ? (
-            <Button size="small" onClick={() => changeViewMode()}>
-              {viewMode === "month" ? "일 별로 보기" : "월 별로 보기"}
+          allowtoggle === "on" ? (
+            <Button size="small" onClick={() => changeviewmode()}>
+              {viewmode === "month" ? "일 별로 보기" : "월 별로 보기"}
             </Button>
           ) : (
             ""
           )
         }
         title={
-          allowToggleBtn
-            ? viewMode === "month"
+          allowtoggle === "on"
+            ? viewmode === "month"
               ? "최근 1년 간 전기 사용량"
               : "최근 30일 간 전기 사용량"
             : title

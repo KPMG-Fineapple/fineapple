@@ -23,8 +23,8 @@ const getMonthData = (result) => {
     const { date } = result.current[idx];
     return {
       name: `${date.substring(5, date.length)}월`,
-      current: item,
-      future: predictMonthData[idx],
+      현재: item,
+      예측: predictMonthData[idx],
     };
   });
 
@@ -37,8 +37,9 @@ const getDayData = (result) => {
 
   const data = currentDayData.map((item, idx) => {
     return {
-      current: item,
-      future: predictDayData[idx],
+      name: `${idx + 1}일`,
+      현재: item,
+      예측: predictDayData[idx],
     };
   });
 
@@ -59,7 +60,7 @@ export const Chart = (props) => {
   };
 
   return (
-    <ChartLayout changeViewMode={changeViewMode} viewMode={viewMode} {...props}>
+    <ChartLayout changeviewmode={changeViewMode} viewmode={viewMode} {...props}>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -77,11 +78,11 @@ export const Chart = (props) => {
           <Legend />
           <Line
             type="monotone"
-            dataKey="current"
+            dataKey="현재"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
-          <Line type="monotone" dataKey="future" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="예측" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
     </ChartLayout>

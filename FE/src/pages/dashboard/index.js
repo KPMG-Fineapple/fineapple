@@ -21,14 +21,14 @@ const Dashboard = ({ powerGenrationResult, consumptionResult }) => (
           <Grid item lg={12} md={12} xl={12} xs={12}>
             <Chart
               title="전기 사용량"
-              allowToggleBtn={true}
+              allowtoggle="on"
               result={powerGenrationResult}
             />
           </Grid>
           <Grid item lg={8} md={8} xl={8} xs={12}>
             <Chart
               title="현재 소비량 발전량 비교"
-              allowToggleBtn={false}
+              allowtoggle="off"
               result={powerGenrationResult}
             />
           </Grid>
@@ -41,7 +41,7 @@ const Dashboard = ({ powerGenrationResult, consumptionResult }) => (
           <Grid item lg={12} md={12} xl={12} xs={12}>
             <Chart
               title="다음달 소비량 예측"
-              allowToggleBtn={false}
+              allowtoggle="off"
               result={powerGenrationResult}
             />
           </Grid>
@@ -65,8 +65,6 @@ export async function getServerSideProps() {
   const consumptionResult = await (
     await fetch(`http://localhost:3001/api/predict/consumption?address=hihi`)
   ).json();
-
-  console.log(powerGenrationResult);
 
   return {
     props: {
