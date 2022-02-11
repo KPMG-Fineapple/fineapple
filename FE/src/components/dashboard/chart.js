@@ -1,88 +1,87 @@
-import { Bar } from "react-chartjs-2";
-import { useTheme } from "@mui/material";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { ChartLayout } from "./chart-layout";
 
 export const Chart = (props) => {
-  const theme = useTheme();
-
-  const data = {
-    datasets: [
-      {
-        backgroundColor: "#3F51B5",
-        barPercentage: 0.5,
-        barThickness: 12,
-        borderRadius: 4,
-        categoryPercentage: 0.5,
-        data: [18, 5, 19, 27, 29, 19, 20],
-        label: "This year",
-        maxBarThickness: 10,
-      },
-      {
-        backgroundColor: "#EEEEEE",
-        barPercentage: 0.5,
-        barThickness: 12,
-        borderRadius: 4,
-        categoryPercentage: 0.5,
-        data: [11, 20, 12, 29, 30, 25, 13],
-        label: "Last year",
-        maxBarThickness: 10,
-      },
-    ],
-    labels: ["1 Aug", "2 Aug", "3 Aug", "4 Aug", "5 Aug", "6 Aug", "7 aug"],
-  };
-
-  const options = {
-    animation: false,
-    cornerRadius: 20,
-    layout: { padding: 0 },
-    legend: { display: false },
-    maintainAspectRatio: false,
-    responsive: true,
-    xAxes: [
-      {
-        ticks: {
-          fontColor: theme.palette.text.secondary,
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false,
-        },
-      },
-    ],
-    yAxes: [
-      {
-        ticks: {
-          fontColor: theme.palette.text.secondary,
-          beginAtZero: true,
-          min: 0,
-        },
-        gridLines: {
-          borderDash: [2],
-          borderDashOffset: [2],
-          color: theme.palette.divider,
-          drawBorder: false,
-          zeroLineBorderDash: [2],
-          zeroLineBorderDashOffset: [2],
-          zeroLineColor: theme.palette.divider,
-        },
-      },
-    ],
-    tooltips: {
-      backgroundColor: theme.palette.background.paper,
-      bodyFontColor: theme.palette.text.secondary,
-      borderColor: theme.palette.divider,
-      borderWidth: 1,
-      enabled: true,
-      footerFontColor: theme.palette.text.secondary,
-      intersect: false,
-      mode: "index",
-      titleFontColor: theme.palette.text.primary,
+  const data = [
+    {
+      name: "Page A",
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
     },
-  };
+    {
+      name: "Page B",
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      name: "Page C",
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      name: "Page D",
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    },
+    {
+      name: "Page E",
+      uv: 1890,
+      pv: 4800,
+      amt: 2181,
+    },
+    {
+      name: "Page F",
+      uv: 2390,
+      pv: 3800,
+      amt: 2500,
+    },
+    {
+      name: "Page G",
+      uv: 3490,
+      pv: 4300,
+      amt: 2100,
+    },
+  ];
 
   return (
     <ChartLayout {...props}>
-      <Bar data={data} options={options} />
+      <ResponsiveContainer>
+        <LineChart
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="pv"
+            stroke="#8884d8"
+            activeDot={{ r: 8 }}
+          />
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        </LineChart>
+      </ResponsiveContainer>
     </ChartLayout>
   );
 };
