@@ -9,55 +9,57 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { ChartLayout } from "./chart-layout";
+import { useState } from "react";
+
+const getMonthData = (result) => {
+  const currentMonthData = result.current.map((monthData) => {
+    return monthData.value.reduce((acc, cur) => acc + cur);
+  });
+  const predictMonthData = result.predict.map((monthData) => {
+    return monthData.value.reduce((acc, cur) => acc + cur);
+  });
+
+  const data = currentMonthData.map((item, idx) => {
+    const { date } = result.current[idx];
+    return {
+      name: `${date.substring(5, date.length)}월`,
+      current: item,
+      future: predictMonthData[idx],
+    };
+  });
+
+  return data;
+};
+
+const getDayData = (result) => {
+  const currentDayData = result.current[11].value;
+  const predictDayData = result.predict[11].value;
+
+  const data = currentDayData.map((item, idx) => {
+    return {
+      current: item,
+      future: predictDayData[idx],
+    };
+  });
+
+  return data;
+};
 
 export const Chart = (props) => {
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+  const { result } = props;
+  const [viewMode, setViewMode] = useState("month");
+  const [data, setData] = useState(getMonthData(result));
+
+  const changeViewMode = () => {
+    const mode = viewMode === "month" ? "day" : "month";
+    setViewMode(mode);
+    viewMode === "day"
+      ? setData(getMonthData(result))
+      : setData(getDayData(result));
+  };
 
   return (
-    <ChartLayout {...props}>
+    <ChartLayout changeViewMode={changeViewMode} viewMode={viewMode} {...props}>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -75,11 +77,11 @@ export const Chart = (props) => {
           <Legend />
           <Line
             type="monotone"
-            dataKey="pv"
+            dataKey="current"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="future" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
     </ChartLayout>

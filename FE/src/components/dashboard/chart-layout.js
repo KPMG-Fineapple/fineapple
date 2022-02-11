@@ -6,30 +6,29 @@ import {
   CardHeader,
   Divider,
 } from "@mui/material";
-import { useState } from "react";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export const ChartLayout = (props) => {
-  const [viewMode, setViewMode] = useState("month");
-  const { children } = props;
-
-  const changeViewMode = () => {
-    const mode = viewMode === "month" ? "day" : "month";
-    setViewMode(mode);
-  };
+  const { children, allowToggleBtn, title, changeViewMode, viewMode } = props;
 
   return (
     <Card {...props}>
       <CardHeader
         action={
-          <Button size="small" onClick={() => changeViewMode()}>
-            {viewMode === "month" ? "일 별로 보기" : "월 별로 보기"}
-          </Button>
+          allowToggleBtn ? (
+            <Button size="small" onClick={() => changeViewMode()}>
+              {viewMode === "month" ? "일 별로 보기" : "월 별로 보기"}
+            </Button>
+          ) : (
+            ""
+          )
         }
         title={
-          viewMode === "month"
-            ? "최근 1년 간 전기 사용량"
-            : "최근 30일 간 전기 사용량"
+          allowToggleBtn
+            ? viewMode === "month"
+              ? "최근 1년 간 전기 사용량"
+              : "최근 30일 간 전기 사용량"
+            : title
         }
       />
       <Divider />
