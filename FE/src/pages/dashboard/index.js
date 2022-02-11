@@ -21,8 +21,14 @@ const Dashboard = () => (
           <Grid item lg={8} md={12} xl={9} xs={12}>
             <Chart />
           </Grid>
-          <Grid item lg={4} md={6} xl={3} xs={12}>
+          <Grid item lg={8} md={8} xl={8} xs={12}>
+            <Chart />
+          </Grid>
+          <Grid item lg={4} md={4} xl={4} xs={12}>
             <TrafficByDevice sx={{ height: "100%" }} />
+          </Grid>
+          <Grid item lg={8} md={12} xl={9} xs={12}>
+            <Chart />
           </Grid>
         </Grid>
       </Container>
