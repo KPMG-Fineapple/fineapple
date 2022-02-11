@@ -7,7 +7,6 @@ import {
   Divider,
 } from "@mui/material";
 import { useState } from "react";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export const ChartLayout = (props) => {
@@ -23,11 +22,7 @@ export const ChartLayout = (props) => {
     <Card {...props}>
       <CardHeader
         action={
-          <Button
-            endIcon={<ArrowDropDownIcon fontSize="small" />}
-            size="small"
-            onClick={() => changeViewMode()}
-          >
+          <Button size="small" onClick={() => changeViewMode()}>
             {viewMode === "month" ? "일 별로 보기" : "월 별로 보기"}
           </Button>
         }
