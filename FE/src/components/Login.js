@@ -108,7 +108,16 @@ export default function Login({ updateLogin }) {
               >
                 로그인하기
               </Button>
-              <Grid container>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => setSignUp(true)}
+              >
+                처음 오셨어요? 우리집 예상 수익률 계산하기
+              </Button>
+              {/* <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
                   <Link
@@ -116,10 +125,10 @@ export default function Login({ updateLogin }) {
                     variant="body2"
                     onClick={() => setSignUp(true)}
                   >
-                    {"회원가입"}
+                    {"우리집 예상 수익률 계산하기"}
                   </Link>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Box>
           </Box>
         ) : (
