@@ -105,6 +105,7 @@ export default function Login({ updateLogin }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={() => router.push("/dashboard")}
               >
                 로그인하기
               </Button>
@@ -113,7 +114,7 @@ export default function Login({ updateLogin }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => setSignUp(true)}
+                onClick={() => router.push("/dashboard")}
               >
                 처음 오셨어요? 우리집 예상 수익률 계산하기
               </Button>
