@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
+    "deploy": "pm2 start npm --name client -- start",
     "lint": "next lint",
     "lint-fix": "next lint --fix"
   },
@@ -32,11 +33,15 @@
     "react-chartjs-2": "^3.0.4",
     "react-dom": "^17.0.2",
     "react-perfect-scrollbar": "^1.5.8",
+    "recharts": "^2.1.9",
     "uuid": "^8.3.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.2",
     "eslint": "^7.32.0",
-    "eslint-config-next": "12.0.3-canary.7"
+    "eslint-config-next": "12.0.3-canary.7",
+    "postcss": "^8.4.6",
+    "tailwindcss": "^3.0.21"
   }
 }
