@@ -7,8 +7,10 @@ export class ConsumptionController {
   constructor(private consumptionService: ConsumptionService) {}
 
   @Get()
-  getConsumption(@Query('address') address: string) {
+  async getConsumption(@Query('address') address: string) {
     this.logger.verbose(`address: ${address} trying to get consumption`);
-    return this.consumptionService.getConsumption(address);
+    const result = await this.consumptionService.getConsumption(address);
+    this.logger.debug(result);
+    return result;
   }
 }
