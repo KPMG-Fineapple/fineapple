@@ -15,6 +15,4 @@ function Dashboard() {
   );
 }
 
-Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
 export default Dashboard;
