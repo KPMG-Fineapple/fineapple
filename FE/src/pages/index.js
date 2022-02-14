@@ -1,7 +1,5 @@
-import { Button, Container, createTheme, CssBaseline } from "@mui/material";
+import { Container, createTheme, CssBaseline } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Image from "next/image";
-import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import Header from "src/components/home/header";
 import MainFeaturedPost from "src/components/home/main-post";

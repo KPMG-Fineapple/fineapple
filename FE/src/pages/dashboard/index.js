@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { Box, Container, Grid } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { Chart } from "src/components/dashboard/chart";

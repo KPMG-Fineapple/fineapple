@@ -3,14 +3,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import PropTypes from "prop-types";
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Divider, Drawer, Typography, useMediaQuery } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ChartBar as ChartBarIcon } from "../icons/chart-bar";
