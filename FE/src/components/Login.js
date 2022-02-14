@@ -74,7 +74,12 @@ export default function Login({ updateLogin }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => router.push("/dashboard")}
+                onClick={() =>
+                  router.push({
+                    pathname: "/dashboard",
+                    query: { isLogin: true },
+                  })
+                }
               >
                 로그인하기
               </Button>
@@ -123,7 +128,12 @@ export default function Login({ updateLogin }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => router.push("/dashboard")}
+                onClick={() =>
+                  router.push({
+                    pathname: "/dashboard",
+                    query: { isLogin: false },
+                  })
+                }
               >
                 예측 결과 보러 가기
               </Button>
