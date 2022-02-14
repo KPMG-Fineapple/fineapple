@@ -3,12 +3,9 @@ import { Box, Container, Grid } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { Chart } from "src/components/dashboard/chart";
 import { CustomBarChart } from "src/components/dashboard/bar-chart";
-
+import { TotalCustomers } from "src/components/dashboard/example-card";
 const Dashboard = ({ powerGenrationResult, consumptionResult }) => (
   <>
-    <Head>
-      <title>Dashboard | Material Kit</title>
-    </Head>
     <Box
       component="main"
       sx={{
@@ -18,12 +15,17 @@ const Dashboard = ({ powerGenrationResult, consumptionResult }) => (
     >
       <Container maxWidth={false}>
         <Grid container spacing={3}>
-          <Grid item lg={12} md={12} xl={12} xs={12}>
-            <Chart
-              title="전기 사용량"
-              allowtoggle="on"
-              result={powerGenrationResult}
-            />
+          <Grid item lg={3} md={6} xl={3} xs={6}>
+            <TotalCustomers />
+          </Grid>
+          <Grid item lg={3} md={6} xl={3} xs={6}>
+            <TotalCustomers />
+          </Grid>
+          <Grid item lg={3} md={6} xl={3} xs={6}>
+            <TotalCustomers />
+          </Grid>
+          <Grid item lg={3} md={6} xl={3} xs={6}>
+            <TotalCustomers />
           </Grid>
           <Grid item lg={8} md={8} xl={8} xs={12}>
             <Chart
@@ -40,8 +42,8 @@ const Dashboard = ({ powerGenrationResult, consumptionResult }) => (
           </Grid>
           <Grid item lg={12} md={12} xl={12} xs={12}>
             <Chart
-              title="다음달 소비량 예측"
-              allowtoggle="off"
+              title="전기 사용량"
+              allowtoggle="on"
               result={powerGenrationResult}
             />
           </Grid>
