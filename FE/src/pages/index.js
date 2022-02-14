@@ -1,50 +1,59 @@
-import { Button } from "@mui/material";
+import { Button, Container, createTheme, CssBaseline } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
+import Header from "src/components/home/header";
+import MainFeaturedPost from "src/components/home/main-post";
+import FeaturedPost from "src/components/home/feature-post";
+import { ThemeProvider } from "@mui/styles";
 
 function Main() {
   const router = useRouter();
+  const theme = createTheme();
 
+  const mainFeaturedPost = {
+    title: "Fine apple의 태양광 솔루션",
+    description:
+      "소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요",
+    image:
+      "https://newsimg-hams.hankookilbo.com/2022/02/03/4b4eff73-5adb-40a2-99a3-bf4aa929fa3e.jpg",
+    imageText: "main image description",
+  };
+
+  const featuredPosts = [
+    {
+      title: "태양광 올인원 서비스",
+      description:
+        "소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요",
+      image:
+        "http://www.solartodaymag.com/news/photo/201706/4574_3285_4224.jpg",
+      imageText: "Image Text",
+      url: "/home/main",
+    },
+    {
+      title: "태양광 투자 서비스",
+      description:
+        "소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요",
+      image:
+        "https://img.etoday.co.kr/pto_db/2019/01/600/20190121101335_1293391_1200_800.jpg",
+      imageText: "Image Text",
+      url: "/home/main",
+    },
+  ];
   return (
-    <Grid
-      container
-      justify="center"
-      alignItems="center"
-      direction="column"
-      style={{ marginTop: "20vh" }}
-      spacing={5}
-    >
-      <Grid item>
-        <Image src="/static/logo2.svg" alt="logo" width="192" height="192" />
-      </Grid>
-      <Grid item>
-        <Typography component="h1" variant="h5">
-          원하시는 서비스를 선택해주세요
-        </Typography>
-        <Grid item>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => router.push("/home/main")}
-          >
-            가정용
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => router.push("/home/main")}
-          >
-            투자용
-          </Button>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <Header title="Fine apple" sections={[]} />
+        <MainFeaturedPost post={mainFeaturedPost} />
+        <Grid container spacing={4}>
+          {featuredPosts.map((post) => (
+            <FeaturedPost key={post.title} post={post} />
+          ))}
         </Grid>
-      </Grid>
-    </Grid>
+      </Container>
+    </ThemeProvider>
   );
 }
 
