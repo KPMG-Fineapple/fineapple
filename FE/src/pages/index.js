@@ -44,7 +44,7 @@ function Dashboard() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => router.push("/home/main")}
+          onClick={() => router.push("/invest/investDashboard")}
         >
           투자용
         </Button>
