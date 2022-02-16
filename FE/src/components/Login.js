@@ -12,6 +12,7 @@ import Image from "next/image";
 
 export default function Login({ updateLogin }) {
   const router = useRouter();
+  const { mode } = router.query;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,10 +21,6 @@ export default function Login({ updateLogin }) {
 
   const [signUp, setSignUp] = useState(false);
   const [address, setAddress] = useState(null);
-  const handleLogin = () => {
-    updateLogin(address);
-    console.log(address);
-  };
 
   return (
     <>
@@ -76,22 +73,26 @@ export default function Login({ updateLogin }) {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={() =>
                   router.push({
-                    pathname: "/dashboard",
+                    pathname: `/${mode}`,
                     query: { isLogin: true },
                   })
                 }
               >
                 로그인하기
               </Button>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={() => setSignUp(true)}
-              >
-                처음 오셨어요? 우리집 예상 수익률 계산하기
-              </Button>
+              {mode !== "invest" ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={() => setSignUp(true)}
+                >
+                  처음 오셨어요? 우리집 예상 수익률 계산하기
+                </Button>
+              ) : (
+                <></>
+              )}
             </Box>
           </Box>
         </Container>

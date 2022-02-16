@@ -1,4 +1,3 @@
-
 function item1() {
   return <div>funding item1</div>;
 }
