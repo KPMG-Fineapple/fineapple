@@ -1,4 +1,3 @@
-import React from "react";
 
 function item1() {
   return <div>funding item1</div>;
