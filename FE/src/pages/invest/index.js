@@ -1,8 +1,6 @@
-import React from "react";
 import { Box, ImageList, ImageListItem } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { DashboardLayout } from "../../components/dashboard-layout";
-import { useState } from "react";
 import { useRouter } from "next/router";
 
 function investDashboard() {
