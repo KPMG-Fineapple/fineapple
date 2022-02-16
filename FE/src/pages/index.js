@@ -27,7 +27,7 @@ function Main() {
       image:
         "http://www.solartodaymag.com/news/photo/201706/4574_3285_4224.jpg",
       imageText: "Image Text",
-      url: "/home/main",
+      url: "/home/main?mode=dashboard",
     },
     {
       title: "태양광 투자 서비스",
@@ -36,9 +36,10 @@ function Main() {
       image:
         "https://img.etoday.co.kr/pto_db/2019/01/600/20190121101335_1293391_1200_800.jpg",
       imageText: "Image Text",
-      url: "/home/main",
+      url: "/home/main?mode=invest",
     },
   ];
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
