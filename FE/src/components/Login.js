@@ -1,39 +1,14 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
+import Image from "next/image";
 
 export default function Login({ updateLogin }) {
   const router = useRouter();
@@ -41,11 +16,6 @@ export default function Login({ updateLogin }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
 
   const [signUp, setSignUp] = useState(false);
@@ -56,10 +26,9 @@ export default function Login({ updateLogin }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        {!signUp ? (
+    <>
+      {!signUp ? (
+        <Container component="main" maxWidth="xs" style={{ marginTop: "20vh" }}>
           <Box
             sx={{
               marginTop: 8,
@@ -105,7 +74,12 @@ export default function Login({ updateLogin }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => router.push("/dashboard")}
+                onClick={() =>
+                  router.push({
+                    pathname: "/dashboard",
+                    query: { isLogin: true },
+                  })
+                }
               >
                 로그인하기
               </Button>
@@ -114,52 +88,59 @@ export default function Login({ updateLogin }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => router.push("/dashboard")}
+                onClick={() => setSignUp(true)}
               >
                 처음 오셨어요? 우리집 예상 수익률 계산하기
               </Button>
-              {/* <Grid container>
-                <Grid item xs></Grid>
-                <Grid item>
-                  <Link
-                    href="#"
-                    variant="body2"
-                    onClick={() => setSignUp(true)}
-                  >
-                    {"우리집 예상 수익률 계산하기"}
-                  </Link>
-                </Grid>
-              </Grid> */}
             </Box>
           </Box>
-        ) : (
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 30 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="address"
-              label="거주하시는 주소를 입력해주세요"
-              onChange={(e) => setAddress(e.target.value)}
-              id="address"
+        </Container>
+      ) : (
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          direction="column"
+          spacing={5}
+          style={{ marginTop: "25vh" }}
+        >
+          <Grid item>
+            <Image
+              src="/static/logo2.svg"
+              alt="logo"
+              width="192"
+              height="192"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleLogin}
-            >
-              예측 결과 보러 가기
-            </Button>
-          </Box>
-        )}
-      </Container>
-    </ThemeProvider>
+          </Grid>
+          <Grid item>
+            <Box component="form" onSubmit={handleSubmit} noValidate>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="address"
+                label="거주하시는 주소를 입력해주세요"
+                onChange={(e) => setAddress(e.target.value)}
+                id="address"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() =>
+                  router.push({
+                    pathname: "/dashboard",
+                    query: { isLogin: false },
+                  })
+                }
+              >
+                예측 결과 보러 가기
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      )}
+    </>
   );
 }
