@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+import Link from "next/link";
 import Image from "next/image";
 
 function Header(props) {
@@ -12,17 +12,27 @@ function Header(props) {
   return (
     <>
       <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Image src="/static/logo2.svg" alt="logo" width="48" height="48" />
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 1 }}
-        >
-          {title}
-        </Typography>
+        <Link href="/">
+          <Image
+            className={"pointer"}
+            src="/static/logo2.svg"
+            alt="logo"
+            width="48"
+            height="48"
+          />
+        </Link>
+        <Link href="/">
+          <Typography
+            component="h2"
+            variant="h5"
+            color="inherit"
+            align="center"
+            noWrap
+            sx={{ flex: 1, cursor: "pointer" }}
+          >
+            {title}
+          </Typography>
+        </Link>
         <IconButton>
           <SearchIcon />
         </IconButton>
@@ -48,6 +58,12 @@ function Header(props) {
           </Link>
         ))}
       </Toolbar>
+
+      <style jsx global>{`
+        .pointer {
+          cursor: pointer;
+        }
+      `}</style>
     </>
   );
 }
