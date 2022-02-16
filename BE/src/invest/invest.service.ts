@@ -8,8 +8,7 @@ export class InvestService {
     {
       id: 1,
       title: '전북 전주시 덕진구 태양광 발전소 투자',
-      imageUrl:
-        'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202106/29/a08ca7d2-08d4-40bb-85be-784898af5ee3.jpg',
+      imageUrl: '/static/images/items/item1.jpeg',
       price: 58800,
       investAmount: 120302900,
       investorNumber: 2067,
