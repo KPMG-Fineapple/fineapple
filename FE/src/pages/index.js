@@ -1,15 +1,9 @@
-import { Container, createTheme, CssBaseline } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useRouter } from "next/router";
-import Header from "src/components/home/header";
 import MainFeaturedPost from "src/components/home/main-post";
 import FeaturedPost from "src/components/home/feature-post";
-import { ThemeProvider } from "@mui/styles";
+import { Layout } from "src/components/home/layout";
 
 function Main() {
-  const router = useRouter();
-  const theme = createTheme();
-
   const mainFeaturedPost = {
     title: "Fine apple의 태양광 솔루션",
     description:
@@ -41,18 +35,14 @@ function Main() {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="lg">
-        <Header title="Fine apple" sections={[]} />
-        <MainFeaturedPost post={mainFeaturedPost} />
-        <Grid container spacing={4}>
-          {featuredPosts.map((post) => (
-            <FeaturedPost key={post.title} post={post} />
-          ))}
-        </Grid>
-      </Container>
-    </ThemeProvider>
+    <Layout>
+      <MainFeaturedPost post={mainFeaturedPost} />
+      <Grid container spacing={4}>
+        {featuredPosts.map((post) => (
+          <FeaturedPost key={post.title} post={post} />
+        ))}
+      </Grid>
+    </Layout>
   );
 }
 
