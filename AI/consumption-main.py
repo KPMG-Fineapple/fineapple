@@ -2,14 +2,16 @@
 import json
 import pandas as pd
 
-from preprocess.consumption import UserConsumption
+from preprocess import consumption  # import UserConsumption
 from model.consumption import predict_xgboost
 
 # %%
+
+
 def load_current() -> list:
     # -- current -- #
-    PATH = "data/private/PowerConsumption/"
-    User = UserConsumption(PATH)
+    PATH = "AI/data/private/PowerConsumption/"
+    User = consumption.UserConsumption(PATH)
     current: pd.DataFrame = User.load_data(
         PATH + "세대별 기간별(107-2201 2021년01월01일 ∼2021년12월31일).xls"
     )
