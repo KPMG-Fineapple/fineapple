@@ -1,69 +1,76 @@
-import { Box, ImageList, ImageListItem } from "@mui/material";
+import { Box, ImageList, ImageListItem, Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { DashboardLayout } from "../../components/dashboard-layout";
 import { useRouter } from "next/router";
+import { Layout } from "src/components/home/layout";
+import Card from "src/components/invest/card";
 
 function investDashboard() {
   const router = useRouter();
 
   return (
-    <Box
-      sx={{
-        marginTop: 30,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Typography component="h1" variant="h5">
-        관심 있으신 투자처를 선택해주세요
-      </Typography>
-      <ImageList sx={{ display: "flex", padding: 5 }} gap={10}>
-        {itemData.map((item, key) => (
-          <ImageListItem key={item.img}>
-            <img
-              src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="lazy"
-              onClick={() =>
-                router.push(`/invest/items/item${Math.floor(key / 2) + 1}`)
-              }
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
-    </Box>
+    <Layout>
+      <Box
+        sx={{
+          marginTop: 10,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ marginBottom: 8 }}>
+          <Typography component="h1" variant="h4">
+            관심 있으신 투자처를 선택해주세요
+          </Typography>
+        </Box>
+
+        <Grid container spacing={3} columns={27} sx={{ maxWidth: 3000 }}>
+          {itemData.map((item, key) => (
+            <Grid item xs={9}>
+              <Card
+                imgURL={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                alt={item.title}
+                num={item.num}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Layout>
   );
 }
 
 const itemData = [
   {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+    img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Photovoltaik_Dachanlage_Hannover_-_Schwarze_Heide_-_1_MW.jpg/220px-Photovoltaik_Dachanlage_Hannover_-_Schwarze_Heide_-_1_MW.jpg",
     title: "Breakfast",
+    num: 1,
   },
   {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+    img: "https://atmosphere.copernicus.eu/sites/default/files/inline-images/solarpanels_small.png",
     title: "Burger",
+    num: 1,
   },
   {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+    img: "https://idsb.tmgrup.com.tr/ly/uploads/images/2022/01/11/thumbs/800x531/174025.jpg?v=1641907676",
     title: "Camera",
+    num: 2,
   },
   {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+    img: "https://imageio.forbes.com/specials-images/imageserve/604a84cb9488bb7a177e67ba/Aerial-View-Of-Solar-Panels-On-Tree/960x0.jpg?fit=bounds&format=jpg&width=960",
     title: "Coffee",
+    num: 2,
   },
   {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+    img: "https://d12oja0ew7x0i8.cloudfront.net/image-handler/ts/20211123093933/ri/750/src/images/news/ImageForNews_57421_16376783723446339.jpg",
     title: "Hats",
+    num: 3,
   },
   {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
+    img: "https://www.sciencenewsforstudents.org/wp-content/uploads/2020/10/1030_LL_solar_power-1028x579.jpg",
     title: "Honey",
+    num: 3,
   },
 ];
-
-investDashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default investDashboard;
