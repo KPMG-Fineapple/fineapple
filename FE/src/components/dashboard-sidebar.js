@@ -1,20 +1,30 @@
 import { useEffect } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import PropTypes from "prop-types";
-import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from "@mui/material";
+import { Box, Divider, Drawer, Typography, useMediaQuery } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ChartBar as ChartBarIcon } from "../icons/chart-bar";
 
-import { Selector as SelectorIcon } from "../icons/selector";
-
-import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 
 const items = [
   {
     href: "/",
+    icon: <HomeIcon fontSize="small" />,
+    title: "Home",
+  },
+  {
+    href: "/dashboard",
     icon: <ChartBarIcon fontSize="small" />,
     title: "Dashboard",
+  },
+  {
+    href: "/invest",
+    icon: <AttachMoneyIcon fontSize="small" />,
+    title: "Investment",
   },
 ];
 
@@ -53,11 +63,11 @@ export const DashboardSidebar = (props) => {
           <Box sx={{ p: 3 }}>
             <NextLink href="/" passHref>
               <a>
-                <Logo
-                  sx={{
-                    height: 42,
-                    width: 42,
-                  }}
+                <Image
+                  src="/static/logo2.svg"
+                  alt="logo"
+                  width="42"
+                  height="42"
                 />
               </a>
             </NextLink>
@@ -77,19 +87,9 @@ export const DashboardSidebar = (props) => {
             >
               <div>
                 <Typography color="inherit" variant="subtitle1">
-                  Acme Inc
-                </Typography>
-                <Typography color="neutral.400" variant="body2">
-                  Your tier : Premium
+                  Fine apple Inc
                 </Typography>
               </div>
-              <SelectorIcon
-                sx={{
-                  color: "neutral.500",
-                  width: 14,
-                  height: 14,
-                }}
-              />
             </Box>
           </Box>
         </div>
@@ -101,7 +101,12 @@ export const DashboardSidebar = (props) => {
         />
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item) => (
-            <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+            <NavItem
+              key={item.title}
+              icon={item.icon}
+              href={item.href}
+              title={item.title}
+            />
           ))}
         </Box>
         <Divider sx={{ borderColor: "#2D3748" }} />

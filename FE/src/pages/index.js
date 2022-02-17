@@ -1,58 +1,49 @@
-import { Box, Button } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
+import MainFeaturedPost from "src/components/home/main-post";
+import FeaturedPost from "src/components/home/feature-post";
+import { Layout } from "src/components/home/layout";
 
-import { DashboardLayout } from "../components/dashboard-layout";
-import { useState } from "react";
-import Typography from "@mui/material/Typography";
-import { useRouter } from "next/router";
-
-import Login from "../components/Login";
-
-function Dashboard() {
-  const router = useRouter();
-  const [login, setLogin] = useState(null);
-  const updateLogin = () => {
-    setLogin({ address });
-    console.log(login);
+function Main() {
+  const mainFeaturedPost = {
+    title: "Fine apple의 태양광 솔루션",
+    description:
+      "소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요",
+    image:
+      "https://newsimg-hams.hankookilbo.com/2022/02/03/4b4eff73-5adb-40a2-99a3-bf4aa929fa3e.jpg",
+    imageText: "main image description",
   };
+
+  const featuredPosts = [
+    {
+      title: "태양광 올인원 서비스",
+      description:
+        "소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요",
+      image:
+        "http://www.solartodaymag.com/news/photo/201706/4574_3285_4224.jpg",
+      imageText: "Image Text",
+      url: "/home/main?mode=dashboard",
+    },
+    {
+      title: "태양광 투자 서비스",
+      description:
+        "소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요 소개문구 써주세요",
+      image:
+        "https://img.etoday.co.kr/pto_db/2019/01/600/20190121101335_1293391_1200_800.jpg",
+      imageText: "Image Text",
+      url: "/home/main?mode=invest",
+    },
+  ];
+
   return (
-    <Box
-      sx={{
-        marginTop: 8,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Typography component="h1" variant="h5">
-        원하시는 서비스를 선택해주세요
-      </Typography>
-      <Box sx={{ mt: 1 }}>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={() => router.push("/home/main")}
-        >
-          가정용
-        </Button>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={() => router.push("/home/main")}
-        >
-          투자용
-        </Button>
-      </Box>
-    </Box>
+    <Layout>
+      <MainFeaturedPost post={mainFeaturedPost} />
+      <Grid container spacing={4}>
+        {featuredPosts.map((post) => (
+          <FeaturedPost key={post.title} post={post} />
+        ))}
+      </Grid>
+    </Layout>
   );
 }
 
-Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
-export default Dashboard;
+export default Main;
