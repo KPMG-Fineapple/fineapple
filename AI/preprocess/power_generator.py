@@ -7,10 +7,11 @@ Original file is located at
     https://colab.research.google.com/drive/1HFW_fYpo5reoxSaaSg87RNxRwvAnz0vR
 """
 
+# %%
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import torch 
+import torch
 from torch.utils.data.dataset import random_split
 
 import torch
@@ -20,51 +21,58 @@ import torch.functional as F
 from sklearn import preprocessing
 
 
-
+# %%
 def drop_attributes(df):
-# dropping attributes  
-    df=df.drop(["구분","총량","평균","최대","최소","최대(시간별)","최소(시간별)","1","2","3","4","5","24"], axis=1)
+    # dropping attributes
+    df = df.drop(["구분", "총량", "평균", "최대", "최소", "최대(시간별)",
+                 "최소(시간별)", "1", "2", "3", "4", "5", "24"], axis=1)
     return df
 
-def extract_hogi(df,num):
-    #extracting hogi data from loc_ data
-    df=df[df["호기"]==num]
+
+def extract_hogi(df, num):
+    # extracting hogi data from loc_ data
+    df = df[df["호기"] == num]
     return df
+
 
 def normalize_hogi(df):
-    #normalizing hogi
+    # normalizing hogi
     m = df.mean().mean()
     std = df.to_numpy().flatten().std()
     return (df-m)/std
 
+
 def drop_attributes_w(df):
-    #dropping attribues of w and filling nan
-    df = df.drop(["지점","지점명","일사(MJ/m2)","적설(cm)","운형(운형약어)","현상번호(국내식)"], axis=1)
-    df = df.fillna(0) 
+    # dropping attribues of w and filling nan
+    df = df.drop(["지점", "지점명", "일사(MJ/m2)", "적설(cm)",
+                 "운형(운형약어)", "현상번호(국내식)"], axis=1)
+    df = df.fillna(0)
     return df
 
+
 def drop_time(df):
-    #droping 24시 ~ 05시
+    # droping 24시 ~ 05시
     for i in range(df["일시"].count()):
-        time=int(df['일시'][i].split(":")[0].split()[1])
-        if not(time>=6 and time<=23):
-            df=df.drop(index=i,axis=1)
+        time = int(df['일시'][i].split(":")[0].split()[1])
+        if not(time >= 6 and time <= 23):
+            df = df.drop(index=i, axis=1)
     return df
 
 
 def lose_time(df):
-    #changing 일시 > month, time
+    # changing 일시 > month, time
     for i in range(df.shape[0]):
-        df["month"][i]=int(df["일시"][i].split()[0].split("-")[1])
-        df["time"][i]=int(df["일시"][i].split()[1].split(":")[0])
-    df = df.drop(["일시"],axis=1)
+        df["month"][i] = int(df["일시"][i].split()[0].split("-")[1])
+        df["time"][i] = int(df["일시"][i].split()[1].split(":")[0])
+    df = df.drop(["일시"], axis=1)
     return df
 
+
 def normalize_w(df):
-    #normalizing w data
-    for idx,column in enumerate(df.columns):
-        m=df[column].mean()
-        s=df[column].std()
+    # normalizing w data
+    for idx, column in enumerate(df.columns):
+        m = df[column].mean()
+        s = df[column].std()
         df[column] = (df[column]-m)/s
     return df
 
@@ -73,29 +81,29 @@ def preprocess():
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     # print ("device:[%s]."%(device))
 
-        # from google.colab import drive
-        # drive.mount('/content/drive')
+    # from google.colab import drive
+    # drive.mount('/content/drive')
 
-    loc_1_1= pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_1(삼천포)/loc_1_p_1.csv',
-                    encoding='cp949')
-    loc_1_2=pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_1(삼천포)/loc_1_p_2.csv',
-                    encoding='cp949')
-    loc_2 = pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_2(본사사옥_진주)/loc2_p.csv',
-                    encoding='cp949')
-    loc_3 = pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_3(구미)/loc_3_p.csv',
-                    encoding='cp949')
-    loc_4 = pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_4(두산MG_창원)/loc_4_p.csv',
-                    encoding='cp949')
-    loc_1_w= pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_1(삼천포)/loc_1_w.csv',
-                    encoding='cp949')
-    loc_2_w= pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_2(본사사옥_진주)/loc2_w.csv',
-                    encoding='cp949')
-    loc_3_w= pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_3(구미)/loc_3_w.csv',
-                    encoding='cp949')
-    loc_4_w= pd.read_csv('/content/drive/Shareddrives/공모전 DATA/PowerGeneration/loc_4(두산MG_창원)/loc_4_w.csv',
-                    encoding='cp949')
-    
+    # 경로 변경: /content/drive -> AI/data/...
 
+    loc_1_1 = pd.read_csv('AI/data/generation/PowerGeneration/loc_1(삼천포)/loc_1_p_1.csv',
+                          encoding='cp949')
+    loc_1_2 = pd.read_csv('AI/data/generation/PowerGeneration/loc_1(삼천포)/loc_1_p_2.csv',
+                          encoding='cp949')
+    loc_2 = pd.read_csv('AI/data/generation/PowerGeneration/loc_2(본사사옥_진주)/loc2_p.csv',
+                        encoding='cp949')
+    loc_3 = pd.read_csv('AI/data/generation/PowerGeneration/loc_3(구미)/loc_3_p.csv',
+                        encoding='cp949')
+    loc_4 = pd.read_csv('AI/data/generation/PowerGeneration/loc_4(두산MG_창원)/loc_4_p.csv',
+                        encoding='cp949')
+    loc_1_w = pd.read_csv('AI/data/generation/PowerGeneration/loc_1(삼천포)/loc_1_w.csv',
+                          encoding='cp949')
+    loc_2_w = pd.read_csv('AI/data/generation/PowerGeneration/loc_2(본사사옥_진주)/loc2_w.csv',
+                          encoding='cp949')
+    loc_3_w = pd.read_csv('AI/data/generation/PowerGeneration/loc_3(구미)/loc_3_w.csv',
+                          encoding='cp949')
+    loc_4_w = pd.read_csv('AI/data/generation/PowerGeneration/loc_4(두산MG_창원)/loc_4_w.csv',
+                          encoding='cp949')
 
     loc_1_1_n = drop_attributes(loc_1_1)
     loc_1_2_n = drop_attributes(loc_1_2)
@@ -103,43 +111,45 @@ def preprocess():
     loc_3_n = drop_attributes(loc_3)
     loc_4_n = drop_attributes(loc_4)
 
-    GenerationLoc_list = [] #지역별로 hogi_list를 담는 list 
-    #GenerationLoc_list[location_num][hogi_num] = location_num번째 지역에 해당하는 hogi_num 번째 발전기의 발전량
+    GenerationLoc_list = []  # 지역별로 hogi_list를 담는 list
+    # GenerationLoc_list[location_num][hogi_num] = location_num번째 지역에 해당하는 hogi_num 번째 발전기의 발전량
 
-    ####################LOC_1
-    hogi_list = []         #각 지역의 호기 list
-    for i in range(1,5):
-        hogi_list.append(extract_hogi(loc_1_1_n,i))
-        
-    hogi_list.append(extract_hogi(loc_1_2_n,1))
-    hogi_list.append(extract_hogi(loc_1_2_n,2))
+    # LOC_1
+    hogi_list = []  # 각 지역의 호기 list
+    for i in range(1, 5):
+        hogi_list.append(extract_hogi(loc_1_1_n, i))
+
+    hogi_list.append(extract_hogi(loc_1_2_n, 1))
+    hogi_list.append(extract_hogi(loc_1_2_n, 2))
 
     GenerationLoc_list.append(hogi_list)
 
-    ####################LOC_2
-    hogi_list = []        
-    hogi_list.append(extract_hogi(loc_2_n,1))
+    # LOC_2
+    hogi_list = []
+    hogi_list.append(extract_hogi(loc_2_n, 1))
     GenerationLoc_list.append(hogi_list)
 
-
-    ####################LOC_3
-    hogi_list = []        
-    hogi_list.append(extract_hogi(loc_3_n,1))
+    # LOC_3
+    hogi_list = []
+    hogi_list.append(extract_hogi(loc_3_n, 1))
     GenerationLoc_list.append(hogi_list)
 
-
-    ####################LOC_4
-    hogi_list = []        
-    hogi_list.append(extract_hogi(loc_4_n,1))
+    # LOC_4
+    hogi_list = []
+    hogi_list.append(extract_hogi(loc_4_n, 1))
     GenerationLoc_list.append(hogi_list)
 
-    ###호기 cloumn drop 
+    # 호기 cloumn drop
     for i in range(len(GenerationLoc_list[0])):
-        GenerationLoc_list[0][i]=GenerationLoc_list[0][i].drop(["호기","년월일"],axis=1)
+        GenerationLoc_list[0][i] = GenerationLoc_list[0][i].drop(
+            ["호기", "년월일"], axis=1)
 
-    GenerationLoc_list[1][0]=GenerationLoc_list[1][0].drop(["호기","년월일"],axis=1)
-    GenerationLoc_list[2][0]=GenerationLoc_list[2][0].drop(["호기","년월일"],axis=1)
-    GenerationLoc_list[3][0]=GenerationLoc_list[3][0].drop(["호기","년월일"],axis=1)
+    GenerationLoc_list[1][0] = GenerationLoc_list[1][0].drop(
+        ["호기", "년월일"], axis=1)
+    GenerationLoc_list[2][0] = GenerationLoc_list[2][0].drop(
+        ["호기", "년월일"], axis=1)
+    GenerationLoc_list[3][0] = GenerationLoc_list[3][0].drop(
+        ["호기", "년월일"], axis=1)
 
     GenerationLoc_list_norm = []
 
@@ -147,34 +157,33 @@ def preprocess():
         hogi_list_norm = []
         GenerationLoc_list_norm.append(hogi_list_norm)
         for hogi in GenerationLoc_list[i]:
-            GenerationLoc_list_norm[i].append(normalize_hogi(hogi).set_index(np.arange(hogi.shape[0])))
-            
+            GenerationLoc_list_norm[i].append(normalize_hogi(
+                hogi).set_index(np.arange(hogi.shape[0])))
 
-    ### plotting 
+    # plotting
     # fig, axes = plt.subplots(9,2,figsize=(20,20))
     # for i in range(len(GenerationLoc_list_norm[0])):
     #     y=GenerationLoc_list_norm[0][i].to_numpy().flatten()[:90]
     #     axes[i][0].plot(np.arange(len(y)),y)
-            
+
     #     y=GenerationLoc_list[0][i].to_numpy().flatten()[:90]
     #     axes[i][1].plot(np.arange(len(y)),y)
-        
 
     # y=GenerationLoc_list_norm[1][0].to_numpy().flatten()[:90]
     # axes[6][0].plot(np.arange(len(y)),y)
-            
+
     # y=GenerationLoc_list[1][0].to_numpy().flatten()[:90]
     # axes[6][1].plot(np.arange(len(y)),y)
 
     # y=GenerationLoc_list_norm[2][0].to_numpy().flatten()[:90]
     # axes[7][0].plot(np.arange(len(y)),y)
-            
+
     # y=GenerationLoc_list[2][0].to_numpy().flatten()[:90]
     # axes[7][1].plot(np.arange(len(y)),y)
 
     # y=GenerationLoc_list_norm[2][0].to_numpy().flatten()[:90]
     # axes[8][0].plot(np.arange(len(y)),y)
-            
+
     # y=GenerationLoc_list[2][0].to_numpy().flatten()[:90]
     # axes[8][1].plot(np.arange(len(y)),y)
 
@@ -186,7 +195,6 @@ def preprocess():
 
     #         y=GenerationLoc_list[0][i].to_numpy().flatten()[:n]
     #         axes[i][1].plot(np.arange(len(y)),y)
-
 
     #     y=GenerationLoc_list_norm[1][0].to_numpy().flatten()[:n]
     #     axes[6][0].plot(np.arange(len(y)),y)
@@ -208,15 +216,13 @@ def preprocess():
 
     # plot_GenerationLoc_list(GenerationLoc_list_norm, GenerationLoc_list, 700)
 
-    # def plot_hogi_list(hogi_list_norm, hogi_list,n):    
+    # def plot_hogi_list(hogi_list_norm, hogi_list,n):
     #     fig, axes = plt.subplots(2,1,figsize=(40,20))
     #     y=hogi_list_norm.to_numpy().flatten()[:n]
     #     axes[0][0].plot(np.arange(len(y)),y)
 
     #     y=hogi_list.to_numpy().flatten()[:n]
     #     axes[1][0].plot(np.arange(len(y)),y)
-        
-
 
     loc_1_w_n = drop_attributes_w(loc_1_w)
     loc_2_w_n = drop_attributes_w(loc_2_w)
@@ -228,19 +234,19 @@ def preprocess():
     loc_3_w_n = drop_time(loc_3_w_n)
     loc_4_w_n = drop_time(loc_4_w_n)
 
-    loc_1_w_n=loc_1_w_n.set_index(np.arange(loc_1_w_n.shape[0]))
-    loc_2_w_n=loc_2_w_n.set_index(np.arange(loc_2_w_n.shape[0]))
-    loc_3_w_n=loc_3_w_n.set_index(np.arange(loc_3_w_n.shape[0]))
-    loc_4_w_n=loc_4_w_n.set_index(np.arange(loc_4_w_n.shape[0]))
+    loc_1_w_n = loc_1_w_n.set_index(np.arange(loc_1_w_n.shape[0]))
+    loc_2_w_n = loc_2_w_n.set_index(np.arange(loc_2_w_n.shape[0]))
+    loc_3_w_n = loc_3_w_n.set_index(np.arange(loc_3_w_n.shape[0]))
+    loc_4_w_n = loc_4_w_n.set_index(np.arange(loc_4_w_n.shape[0]))
 
-    loc_1_w_n["month"]=np.zeros(3294)
-    loc_1_w_n["time"]=np.zeros(3294)
-    loc_2_w_n["month"]=np.zeros(2484)
-    loc_2_w_n["time"]=np.zeros(2484)
-    loc_3_w_n["month"]=np.zeros(3294)
-    loc_3_w_n["time"]=np.zeros(3294)
-    loc_4_w_n["month"]=np.zeros(3294)
-    loc_4_w_n["time"]=np.zeros(3294)
+    loc_1_w_n["month"] = np.zeros(3294)
+    loc_1_w_n["time"] = np.zeros(3294)
+    loc_2_w_n["month"] = np.zeros(2484)
+    loc_2_w_n["time"] = np.zeros(2484)
+    loc_3_w_n["month"] = np.zeros(3294)
+    loc_3_w_n["time"] = np.zeros(3294)
+    loc_4_w_n["month"] = np.zeros(3294)
+    loc_4_w_n["time"] = np.zeros(3294)
 
     loc_1_w_n = lose_time(loc_1_w_n)
     loc_2_w_n = lose_time(loc_2_w_n)
@@ -252,17 +258,15 @@ def preprocess():
     loc_3_w_n = normalize_w(loc_3_w_n)
     loc_4_w_n = normalize_w(loc_4_w_n)
 
-
-
     GenerationLoc_list_norm[0][0]
     GenerationLoc_list_norm_numpy = []
     for i in range(4):
-        GenerationLoc_list_norm_numpy.append(GenerationLoc_list_norm[i][0].to_numpy().flatten())
-        GenerationLoc_list_norm_numpy[i]= GenerationLoc_list_norm_numpy[i][:GenerationLoc_list_norm_numpy[i].shape[0]-18].reshape(-1,1)
+        GenerationLoc_list_norm_numpy.append(
+            GenerationLoc_list_norm[i][0].to_numpy().flatten())
+        GenerationLoc_list_norm_numpy[i] = GenerationLoc_list_norm_numpy[i][:
+                                                                            GenerationLoc_list_norm_numpy[i].shape[0]-18].reshape(-1, 1)
 
-
-    y = np.concatenate((GenerationLoc_list_norm_numpy),axis=0)
-
+    y = np.concatenate((GenerationLoc_list_norm_numpy), axis=0)
 
     W_list_numpy = []
     W_list_numpy.append(loc_1_w_n.to_numpy())
@@ -270,9 +274,39 @@ def preprocess():
     W_list_numpy.append(loc_3_w_n.to_numpy())
     W_list_numpy.append(loc_4_w_n.to_numpy())
 
-    x = np.concatenate((W_list_numpy),axis=0)
+    x = np.concatenate((W_list_numpy), axis=0)
 
-    x = torch.tensor( x,dtype=float) 
-    y = torch.tensor(y,dtype=float)
+    x = torch.tensor(x, dtype=float)
+    y = torch.tensor(y, dtype=float)
 
-    return x,y
+    return x, y
+
+
+# %%
+if __name__ == "__main__":
+    x, y = preprocess()
+    print(x)
+    print(y)
+
+# %%
+
+'''TEST LOG'''
+
+# python AI/preprocess/power_generator.py
+
+#   df["time"][i] = int(df["일시"][i].split()[1].split(":")[0])
+# tensor([[ 0.3338, -0.1521,  0.3077,  ...,  0.0043, -1.4525, -1.6381],
+#         [ 0.4630, -0.1521,  0.0916,  ...,  0.2882, -1.4525, -1.4454],
+#         [ 0.6157, -0.1521, -0.1786,  ...,  0.7484, -1.4525, -1.2527],
+#         ...,
+#         [-2.7384, -0.1612, -1.3059,  ..., -2.2641,  1.4749,  1.2527],
+#         [-2.7949, -0.1612, -1.3059,  ..., -2.3007,  1.4749,  1.4454],
+#         [-2.8175, -0.1612, -1.3548,  ..., -2.3190,  1.4749,  1.6381]],
+#        dtype=torch.float64)
+# tensor([[-0.7659],
+#         [-0.7659],
+#         [-0.4963],
+#         ...,
+#         [ 1.9239],
+#         [-0.7260],
+#         [-0.7260]], dtype=torch.float64)
