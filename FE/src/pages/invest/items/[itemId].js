@@ -132,9 +132,7 @@ export async function getServerSideProps({ params: { itemId } }) {
   ).json();
 
   const powerGenrationResult = await (
-    await fetch(
-      `http://localhost:3001/api/predict/power-generation?address=hihi`
-    )
+    await fetch(`http://localhost:3001/api/predict/power-generation`)
   ).json();
 
   return {

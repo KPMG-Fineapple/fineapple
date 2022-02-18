@@ -133,13 +133,11 @@ const createElectricitySaving = (cur, next) => {
 
 export async function getServerSideProps() {
   const powerGenrationResult = await (
-    await fetch(
-      `http://localhost:3001/api/predict/power-generation?address=hihi`
-    )
+    await fetch(`http://localhost:3001/api/predict/power-generation`)
   ).json();
 
   const consumptionResult = await (
-    await fetch(`http://localhost:3001/api/predict/consumption?address=hihi`)
+    await fetch(`http://localhost:3001/api/predict/consumption`)
   ).json();
 
   return {
