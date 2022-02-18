@@ -10,7 +10,6 @@ export class ConsumptionController {
   async getConsumption(@Query('address') address: string) {
     this.logger.verbose(`address: ${address} trying to get consumption`);
     const result = await this.consumptionService.getConsumption(address);
-    this.logger.debug(result);
     return result;
   }
 }
