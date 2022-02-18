@@ -51,13 +51,17 @@ export const Chart = (props) => {
             strokeWidth={3}
             dot={false}
           />
-          <Line
-            type="monotone"
-            dataKey={keys[2]}
-            stroke="#82ca9d"
-            strokeWidth={3}
-            dot={false}
-          />
+          {keys.length === 3 ? (
+            <Line
+              type="monotone"
+              dataKey={keys[2]}
+              stroke="#82ca9d"
+              strokeWidth={3}
+              dot={false}
+            />
+          ) : (
+            <></>
+          )}
         </LineChart>
       </ResponsiveContainer>
     </ChartLayout>

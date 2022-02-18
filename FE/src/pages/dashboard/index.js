@@ -2,13 +2,17 @@ import { Box, Container, Grid } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { Chart } from "src/components/dashboard/chart";
 import { CustomBarChart } from "src/components/dashboard/bar-chart";
-import { TotalCustomers } from "src/components/dashboard/example-card";
+import { DashboardCard } from "src/components/dashboard/card";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
+import BoltOutlinedIcon from "@mui/icons-material/BoltOutlined";
+import AirOutlinedIcon from "@mui/icons-material/AirOutlined";
 function Dashboard({
   currentResult,
   estimatedElectricitySaving,
   electricityUsage,
+  predictGeneration,
 }) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(
@@ -25,24 +29,69 @@ function Dashboard({
       >
         <Container maxWidth={false}>
           <Grid container spacing={3}>
-            <Grid item lg={3} md={6} xl={3} xs={6}>
-              <TotalCustomers />
-            </Grid>
-            <Grid item lg={3} md={6} xl={3} xs={6}>
-              <TotalCustomers />
-            </Grid>
-            <Grid item lg={3} md={6} xl={3} xs={6}>
-              <TotalCustomers />
-            </Grid>
-            <Grid item lg={3} md={6} xl={3} xs={6}>
-              <TotalCustomers />
-            </Grid>
+            {isLogin ? (
+              <>
+                <Grid item lg={3} md={6} xl={3} xs={6}>
+                  <DashboardCard
+                    title="이번 달 총 발전량"
+                    content={430}
+                    icon={<BoltOutlinedIcon fontSize="large" />}
+                  />
+                </Grid>
+                <Grid item lg={3} md={6} xl={3} xs={6}>
+                  <DashboardCard
+                    title="이번 달 총 소비량"
+                    content={430}
+                    icon={<AttachMoneyOutlinedIcon fontSize="large" />}
+                  />
+                </Grid>
+                <Grid item lg={3} md={6} xl={3} xs={6}>
+                  <DashboardCard
+                    title="이번 달 총 전기료"
+                    content={430}
+                    icon={<BoltOutlinedIcon fontSize="large" />}
+                  />
+                </Grid>
+                <Grid item lg={3} md={6} xl={3} xs={6}>
+                  <DashboardCard
+                    title="이번 달 총 발전수익"
+                    content={430}
+                    icon={<AttachMoneyOutlinedIcon fontSize="large" />}
+                  />
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item lg={6} md={6} xl={6} xs={6}>
+                  <DashboardCard
+                    title="절감 가능한 금액"
+                    content={430}
+                    icon={<AttachMoneyOutlinedIcon fontSize="large" />}
+                  />
+                </Grid>
+                <Grid item lg={6} md={6} xl={6} xs={6}>
+                  <DashboardCard
+                    title="이산화탄소 절감"
+                    content={430}
+                    icon={<AirOutlinedIcon fontSize="large" />}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item lg={8} md={8} xl={8} xs={12}>
-              <Chart
-                title="현재 소비량 발전량 비교"
-                allowtoggle="off"
-                result={currentResult}
-              />
+              {isLogin ? (
+                <Chart
+                  title="우리집 소비량 발전량"
+                  allowtoggle="off"
+                  result={currentResult}
+                />
+              ) : (
+                <Chart
+                  title="우리집 예상 소비량 발전량"
+                  allowtoggle="on"
+                  result={electricityUsage}
+                />
+              )}
             </Grid>
             <Grid item lg={4} md={4} xl={4} xs={12}>
               <CustomBarChart
@@ -54,8 +103,8 @@ function Dashboard({
               <Grid item lg={12} md={12} xl={12} xs={12}>
                 <Chart
                   title="우리 집 미래 발전량"
-                  allowtoggle="on"
-                  result={electricityUsage}
+                  allowtoggle="off"
+                  result={predictGeneration}
                 />
               </Grid>
             ) : (
@@ -72,37 +121,39 @@ Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Dashboard;
 
-const getMonthData = (result) => {
-  const currentMonthData = result.current.map((monthData) => {
+const getMonthData = (consumptionResult, powerGenrationResult) => {
+  const predictConsumption = consumptionResult.predict.map((monthData) => {
     return monthData.value.reduce((acc, cur) => acc + cur);
   });
 
-  const predictMonthData = result.predict.map((monthData) => {
-    return monthData.value.reduce((acc, cur) => acc + cur);
-  });
+  const predictPowerGeneration = powerGenrationResult.predict.map(
+    (monthData) => {
+      return monthData.value.reduce((acc, cur) => acc + cur);
+    }
+  );
 
-  const data = currentMonthData.map((item, idx) => {
-    const { date } = result.current[idx];
+  const data = predictConsumption.map((item, idx) => {
+    const { date } = consumptionResult.predict[idx];
 
     return {
       name: `${date.substring(5, date.length)}월`,
       현재: item,
-      예측: predictMonthData[idx],
+      예측: predictPowerGeneration[idx],
     };
   });
 
   return data;
 };
 
-const getDayData = (result) => {
-  const currentDayData = result.current[11].value;
-  const predictDayData = result.predict[11].value;
+const getDayData = (consumptionResult, powerGenrationResult) => {
+  const predictConsumption = consumptionResult.predict[11].value;
+  const predictPowerGeneration = powerGenrationResult.predict[11].value;
 
-  const data = currentDayData.map((item, idx) => {
+  const data = predictConsumption.map((item, idx) => {
     return {
       name: `${idx + 1}일`,
       현재: item,
-      예측: predictDayData[idx],
+      예측: predictPowerGeneration[idx],
     };
   });
 
@@ -110,12 +161,11 @@ const getDayData = (result) => {
 };
 
 const createCurrentResult = (consumption, powerGenration) => {
-  return consumption.map((item, idx) => {
-    const { date } = item;
+  return consumption.value.map((item, idx) => {
     return {
-      name: `${date.substring(5, date.length)}월`,
-      소비량: item.value.reduce((acc, cur) => acc + cur),
-      발전량: powerGenration[idx].value.reduce((acc, cur) => acc + cur),
+      name: `${idx + 1}일`,
+      소비량: item,
+      발전량: powerGenration.value[idx],
     };
   });
 };
@@ -131,6 +181,16 @@ const createElectricitySaving = (cur, next) => {
   };
 };
 
+const createPredictGeneration = (powerGenration) => {
+  return powerGenration.map((item) => {
+    const { date } = item;
+    return {
+      name: `${date.substring(5, date.length)}월`,
+      발전량: item.value.reduce((acc, cur) => acc + cur),
+    };
+  });
+};
+
 export async function getServerSideProps() {
   const powerGenrationResult = await (
     await fetch(`http://localhost:3001/api/predict/power-generation`)
@@ -144,8 +204,8 @@ export async function getServerSideProps() {
     props: {
       //현재 소비량 발전량 비교
       currentResult: createCurrentResult(
-        consumptionResult.current,
-        powerGenrationResult.current
+        consumptionResult.current[11],
+        powerGenrationResult.current[11]
       ),
       //전기세 예상 절약 수치
       estimatedElectricitySaving: createElectricitySaving(
@@ -154,9 +214,11 @@ export async function getServerSideProps() {
       ),
       //전기 사용량
       electricityUsage: {
-        days: getDayData(consumptionResult),
-        months: getMonthData(consumptionResult),
+        days: getDayData(consumptionResult, powerGenrationResult),
+        months: getMonthData(consumptionResult, powerGenrationResult),
       },
+      //예상 발전량
+      predictGeneration: createPredictGeneration(powerGenrationResult.predict),
     },
   };
 }

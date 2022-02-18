@@ -50,9 +50,6 @@ function Item({ item, powerGenrationResult }) {
                 <Typography align="center" variant="subtitle2">
                   {item.investorNumber.toLocaleString("ko-KR")}명 참여
                 </Typography>
-                <Typography align="center" variant="h6" color="primary">
-                  {item.price.toLocaleString("ko-KR")}원
-                </Typography>
               </Box>
               <Divider
                 sx={{
@@ -86,7 +83,13 @@ function Item({ item, powerGenrationResult }) {
           <Grid item lg={6} md={6} xl={6} xs={12}>
             <InvestAccordions
               title="더 많은 투자 정보"
-              items={["생산성", "투자 방식"]}
+              items={[
+                { title: "설비 용량", description: "6.5 MW" },
+                {
+                  title: "총 투자금 / 투자 기간",
+                  description: "5.6억 / 2022년 2월 ~ 8월",
+                },
+              ]}
             />
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
@@ -94,13 +97,13 @@ function Item({ item, powerGenrationResult }) {
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
             <Chart
-              title="현재 발전량"
+              title="예상 발전량"
               allowtoggle="off"
               result={powerGenrationResult}
             />
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
-            <Chart title="예상 수익률" allowtoggle="off" result={item.yield} />
+            <Chart title="예상 수익" allowtoggle="off" result={item.yield} />
           </Grid>
         </Grid>
       </Container>
@@ -135,7 +138,7 @@ export async function getServerSideProps({ params: { itemId } }) {
     props: {
       item,
       powerGenrationResult: createCurrentGenration(
-        powerGenrationResult.current
+        powerGenrationResult.predict
       ),
     },
   };

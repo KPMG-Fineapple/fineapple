@@ -21,14 +21,10 @@ export function InvestAccordions(props) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>{item}</Typography>
+              <Typography>{item.title}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
+              <Typography>{item.description}</Typography>
             </AccordionDetails>
           </Accordion>
         );

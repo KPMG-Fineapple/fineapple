@@ -23,13 +23,7 @@ export const ChartLayout = (props) => {
             ""
           )
         }
-        title={
-          allowtoggle === "on"
-            ? viewmode === "month"
-              ? "우리 집 미래 발전량"
-              : "우리 집 미래 발전량"
-            : title
-        }
+        title={title}
       />
       <Divider />
       <CardContent>
