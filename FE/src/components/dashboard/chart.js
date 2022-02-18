@@ -80,9 +80,16 @@ export const Chart = (props) => {
             type="monotone"
             dataKey="현재"
             stroke="#8884d8"
-            activeDot={{ r: 8 }}
+            strokeWidth={3}
+            dot={false}
           />
-          <Line type="monotone" dataKey="예측" stroke="#82ca9d" />
+          <Line
+            type="monotone"
+            dataKey="예측"
+            stroke="#82ca9d"
+            strokeWidth={3}
+            dot={false}
+          />
         </LineChart>
       </ResponsiveContainer>
     </ChartLayout>
