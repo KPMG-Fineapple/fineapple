@@ -10,7 +10,7 @@ export const Layout = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ mb: "100px" }}>
         <Header title="Fine apple" sections={[]} />
         {children}
       </Container>
