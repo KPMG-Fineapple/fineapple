@@ -8,6 +8,7 @@ Original file is located at
 """
 
 # %%
+import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -284,7 +285,10 @@ def preprocess():
 
 # %%
 if __name__ == "__main__":
+    start = time.time()
     x, y = preprocess()
+    # [preprocess] time : 168.9127242565155
+    print("[preprocess] time :", time.time() - start)
     print(x)
     print(y)
 

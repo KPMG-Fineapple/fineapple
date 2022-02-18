@@ -1,9 +1,10 @@
+# %%
 import time
 from tqdm import tqdm
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import torch 
+import torch
 from torch.utils.data.dataset import random_split
 
 import torch
@@ -13,10 +14,16 @@ import torch.functional as F
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 
+from preprocess import power_generator
+
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-#spliting data #need y,x from generation module
-def prepare_data(x,y): 
+
+# %%
+# spliting data #need y,x from generation module
+
+
+def prepare_data(x, y):
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.1)
     X_train = X_train.to(device)
     X_test = X_test.to(device)
@@ -58,7 +65,7 @@ class Model1(nn.Module):
 
 # 실행코드
 
-def train_model(X_train,y_train, model):
+def train_model(X_train, y_train, model):
     losses = []
     epochs = 50000
     criterion = torch.nn.MSELoss().to(device)
@@ -78,44 +85,65 @@ def train_model(X_train,y_train, model):
 
         optimizer.step()  # Updates weights and biases with the optimizer (SGD)
 
+
 def predict(X, model):
     return model(X)
 
-def end_to_end(x,y):
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    X_train, y_train, X_test, y_test = prepare_data(x,y)
-    model = Model1(name="logistic_regression", xdim=9, hdim=17, ydim=1).to(device)
+# %%
+
+
+# Model Save & Load
+# https://pytorch.org/tutorials/beginner/saving_loading_models.html#saving-loading-model-for-inference
+
+
+def model_save(model, x, y, PATH="AI/model/power_generator/ann_model.pt"):
+    X_train, y_train, X_test, y_test = prepare_data(x, y)
     train_model(X_train, y_train, model)
-    return predict(X_test,model)
-    
-#loss 시각화
-# fig, axes = plt.subplots(1, 1, figsize=(10, 10))
-# axes.plot(np.arange(1000), losses[:1000])
-# plt.grid()
+    torch.save(model.state_dict(), PATH)
+    print("[Complete] Model Save")
 
-#train set predict 시각화
-# predict = model(X_train).detach().cpu().numpy()
-# fig, axes = plt.subplots(1, 1, figsize=(50, 10))
-# axes.plot(np.arange(200), predict[:200])
-# y_train_numpy = y_train.detach().cpu().numpy()
-# axes.plot(np.arange(200), y_train_numpy[:200])
-# axes.set_xlim(0, 200)
 
-#test set predict 시각화
-# predict = model(X_test).detach().cpu().numpy()
-# fig, axes = plt.subplots(1, 1, figsize=(50, 10))
-# axes.plot(np.arange(200), predict[:200])
-# y_test_numpy = y_test.detach().cpu().numpy()
-# axes.plot(np.arange(200), y_test_numpy[:200])
-# axes.set_xlim(0, 200)
+def model_load(PATH="AI/model/power_generator/ann_model.pt"):
+    # model = TheModelClass(*args, **kwargs)
+    model = Model1(name="logistic_regression",
+                   xdim=9, hdim=17, ydim=1).to(device)
+    model.load_state_dict(torch.load(PATH))
+    model.eval()
+    return model
+# %%
 
-#test set error 시각화
-# y_test_numpy = y_test.detach().cpu().numpy()    # 모델의 최종 반환값?
-# loss = (-predict + y_test_numpy)/y_test_numpy*100
-# fig, axes = plt.subplots(1, 1, figsize=(50, 10))
-# axes.plot(np.arange(200), loss[:200])
+# RUN
 
-# 피드백
-# return이 모델의 최종 반환값 (예측값)이 되게 실행하는 함수 하나 더 추가
-# 시각화 코드 들어간거 같은데 제거 또는 주석처리
-# 그외 기능별로 묶어둘 것: 또는 주석으로 설명 -> 나 torch 안써서 100% 이해가 안되네
+
+def end_to_end(x, y):
+    X_train, y_train, X_test, y_test = prepare_data(x, y)
+    model = Model1(name="logistic_regression",
+                   xdim=9, hdim=17, ydim=1).to(device)
+    model = model_load()
+    print("[Complete] Model Load")
+    predicted = predict(X_test, model)
+    print(type(predicted), predicted)
+    return predicted
+
+
+# %%
+if __name__ == "__main__":
+    # preprocess에 시간이 너무 오래 걸리는 문제
+    start = time.time()
+    x, y = power_generator.generator_preprocess()
+    # [preprocess] time : 168.9127242565155
+    print("[preprocess] time :", time.time() - start)
+
+    # model load
+    start = time.time()
+    result = end_to_end(x, y)
+    print(result)
+    # [load] time : 0.0028848648071289062
+    print("[load] time :", time.time() - start)
+
+    # train
+    # model = Model1(name="logistic_regression",
+    #                xdim=9, hdim=17, ydim=1).to(device)
+    # model_save(model, x, y)
+
+# %%
