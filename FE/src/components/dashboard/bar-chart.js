@@ -11,20 +11,14 @@ import {
 import { ChartLayout } from "./chart-layout";
 
 export const CustomBarChart = (props) => {
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-  ];
+  const { result } = props;
+  const keys = Object.keys(result);
 
   return (
     <ChartLayout {...props}>
       <ResponsiveContainer>
         <BarChart
-          data={data}
+          data={[result]}
           margin={{
             top: 5,
             right: 30,
@@ -37,8 +31,8 @@ export const CustomBarChart = (props) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="pv" fill="#8884d8" />
-          <Bar dataKey="uv" fill="#82ca9d" />
+          <Bar dataKey={keys[1]} fill="#8884d8" />
+          <Bar dataKey={keys[2]} fill="#82ca9d" />
         </BarChart>
       </ResponsiveContainer>
     </ChartLayout>

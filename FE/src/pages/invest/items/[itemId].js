@@ -116,6 +116,16 @@ Item.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Item;
 
+const createCurrentGenration = (powerGenration) => {
+  return powerGenration.map((item, idx) => {
+    const { date } = item;
+    return {
+      name: `${date.substring(5, date.length)}월`,
+      발전량: powerGenration[idx].value.reduce((acc, cur) => acc + cur),
+    };
+  });
+};
+
 export async function getServerSideProps({ params: { itemId } }) {
   const item = await (
     await fetch(`http://localhost:3001/api/invest/items/${itemId}`)
@@ -127,15 +137,12 @@ export async function getServerSideProps({ params: { itemId } }) {
     )
   ).json();
 
-  const consumptionResult = await (
-    await fetch(`http://localhost:3001/api/predict/consumption?address=hihi`)
-  ).json();
-
   return {
     props: {
       item,
-      powerGenrationResult,
-      consumptionResult,
+      powerGenrationResult: createCurrentGenration(
+        powerGenrationResult.current
+      ),
     },
   };
 }
