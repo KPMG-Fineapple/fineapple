@@ -17,6 +17,8 @@ const Img = styled("img")({
 
 export default function Card({ imgURL, num }) {
   const router = useRouter();
+  const imgSrc = num === 3 ? imgURL + ".png" : imgURL + ".jpeg";
+  console.log(imgSrc);
 
   return (
     <Paper
@@ -32,7 +34,7 @@ export default function Card({ imgURL, num }) {
       <Grid container spacing={2}>
         <Stack spacing={0} sx={{ marginLeft: 2 }}>
           <ButtonBase sx={{ width: 150, height: 180 }}>
-            <Img alt="complex" src={imgURL} />
+            <Img alt="complex" src={imgSrc} />
           </ButtonBase>
         </Stack>
         <Grid item xs={12} sm container sx={{ marginTop: 4 }}>
