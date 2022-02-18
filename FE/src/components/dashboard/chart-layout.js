@@ -26,8 +26,8 @@ export const ChartLayout = (props) => {
         title={
           allowtoggle === "on"
             ? viewmode === "month"
-              ? "최근 1년 간 전기 사용량"
-              : "최근 30일 간 전기 사용량"
+              ? "우리 집 미래 발전량"
+              : "우리 집 미래 발전량"
             : title
         }
       />

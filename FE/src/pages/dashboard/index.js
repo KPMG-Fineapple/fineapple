@@ -46,14 +46,14 @@ function Dashboard({
             </Grid>
             <Grid item lg={4} md={4} xl={4} xs={12}>
               <CustomBarChart
-                title="전기세 예상 절약 수치"
+                title="우리집 전기료 절감액"
                 result={estimatedElectricitySaving}
               />
             </Grid>
             {isLogin ? (
               <Grid item lg={12} md={12} xl={12} xs={12}>
                 <Chart
-                  title="전기 사용량"
+                  title="우리 집 미래 발전량"
                   allowtoggle="on"
                   result={electricityUsage}
                 />
@@ -125,9 +125,9 @@ const createElectricitySaving = (cur, next) => {
   const nextSum = next.value.reduce((acc, cur) => acc + cur);
 
   return {
-    name: "이전 달과 다음 달 비교",
-    "이전 달": curSum,
-    "다음 달": nextSum,
+    name: "설치 전과 설치 후 비교",
+    "설치 전": curSum,
+    "설치 후": nextSum,
   };
 };
 

@@ -11,7 +11,7 @@ export const Layout = (props) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ mb: "100px" }}>
-        <Header title="Fine apple" sections={[]} />
+        <Header title="fineapple" sections={[]} />
         {children}
       </Container>
     </ThemeProvider>

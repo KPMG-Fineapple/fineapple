@@ -27,8 +27,6 @@ export const Chart = (props) => {
     viewMode === "day" ? setData(result.months) : setData(result.days);
   };
 
-  console.log(data);
-
   return (
     <ChartLayout changeviewmode={changeViewMode} viewmode={viewMode} {...props}>
       <ResponsiveContainer>
