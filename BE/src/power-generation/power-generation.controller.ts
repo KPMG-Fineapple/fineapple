@@ -7,8 +7,8 @@ export class PowerGenerationController {
   constructor(private powerGenerationService: PowerGenerationService) {}
 
   @Get()
-  getPowerGeneration(@Query('address') address: string) {
-    this.logger.verbose(`address: ${address} trying to get power generation`);
-    return this.powerGenerationService.getPowerGeneration(address);
+  getPowerGeneration() {
+    this.logger.verbose(`getPowerGeneration trying to get power generation`);
+    return this.powerGenerationService.getPowerGeneration();
   }
 }
