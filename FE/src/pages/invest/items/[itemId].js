@@ -100,11 +100,7 @@ function Item({ item, powerGenrationResult }) {
             />
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
-            <Chart
-              title="예상 수익률"
-              allowtoggle="off"
-              result={powerGenrationResult}
-            />
+            <Chart title="예상 수익률" allowtoggle="off" result={item.yield} />
           </Grid>
         </Grid>
       </Container>

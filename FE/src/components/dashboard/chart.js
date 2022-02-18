@@ -25,8 +25,9 @@ export const Chart = (props) => {
     const mode = viewMode === "month" ? "day" : "month";
     setViewMode(mode);
     viewMode === "day" ? setData(result.months) : setData(result.days);
-    console.log(result.days);
   };
+
+  console.log(data);
 
   return (
     <ChartLayout changeviewmode={changeViewMode} viewmode={viewMode} {...props}>

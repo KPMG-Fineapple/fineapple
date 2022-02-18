@@ -1,6 +1,57 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Item } from './item.model';
 
+const yieldData = [
+  {
+    name: '2월',
+    수익률: 5,
+  },
+  {
+    name: '3월',
+    수익률: 6,
+  },
+  {
+    name: '4월',
+    수익률: 7,
+  },
+  {
+    name: '5월',
+    수익률: 8,
+  },
+  {
+    name: '6월',
+    수익률: 9,
+  },
+  {
+    name: '7월',
+    수익률: 10,
+  },
+  {
+    name: '8월',
+    수익률: 9,
+  },
+  {
+    name: '9월',
+    수익률: 8,
+  },
+  {
+    name: '10월',
+    수익률: 7,
+  },
+  {
+    name: '11월',
+    수익률: 6,
+  },
+  {
+    name: '12월',
+    수익률: 5,
+  },
+  {
+    name: '1월',
+    수익률: 4,
+  },
+];
+
 @Injectable()
 export class InvestService {
   private logger = new Logger('InvestService');
@@ -20,6 +71,7 @@ export class InvestService {
       },
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
+      yield: yieldData,
     },
     {
       id: 2,
@@ -36,6 +88,7 @@ export class InvestService {
       },
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
+      yield: yieldData,
     },
     {
       id: 3,
@@ -52,6 +105,7 @@ export class InvestService {
       },
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
+      yield: yieldData,
     },
     {
       id: 4,
@@ -68,6 +122,7 @@ export class InvestService {
       },
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
+      yield: yieldData,
     },
     {
       id: 5,
@@ -84,6 +139,7 @@ export class InvestService {
       },
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
+      yield: yieldData,
     },
     {
       id: 6,
@@ -100,6 +156,7 @@ export class InvestService {
       },
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
+      yield: yieldData,
     },
   ];
 
