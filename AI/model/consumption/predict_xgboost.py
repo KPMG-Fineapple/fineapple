@@ -8,10 +8,10 @@ from xgboost import XGBRegressor
 from sklearn.model_selection import train_test_split
 
 # modules
-from preprocess import asos
-from preprocess import consumption
+from preprocess.consumption.run import run as load_dataset
 
 # %%
+# train
 
 
 def split_dataset(dataset: pd.DataFrame, testset_size: float, do_shuffle: bool):
@@ -20,24 +20,28 @@ def split_dataset(dataset: pd.DataFrame, testset_size: float, do_shuffle: bool):
     return train_test_split(df_x, df_y, test_size=testset_size, shuffle=do_shuffle)
 
 
-# %%
-# train
+def train_xgboost(dataset: pd.DataFrame, n_estimators, learning_rate, early_stopping_rounds, x_test: list) -> tuple:
+    # training set
+    x_train, y_train, x_valid, y_valid = split_dataset(
+        dataset, testset_size=0.2, do_shuffle=False)
 
+    # model
+    xgb_reg = XGBRegressor(n_estimators=n_estimators,
+                           learning_rate=learning_rate,
+                           seed=0)
 
-def train_xgboost(x_train: list, y_train: list, x_valid: list, y_valid: list) -> tuple:
-    xgb_reg = XGBRegressor(n_estimators=50, learning_rate=0.01, seed=0)
+    # train
     xgb_reg.fit(
         x_train,
         y_train,
         eval_set=[(x_train, y_train), (x_valid, y_valid)],
-        early_stopping_rounds=300,
+        early_stopping_rounds=early_stopping_rounds,
         verbose=False,
     )
 
-    pred = xgb_reg.predict(x_valid)
+    pred = xgb_reg.predict(x_test)
     pred = pd.Series(pred)
     return xgb_reg, pred
-
 
 # %%
 
@@ -53,7 +57,8 @@ def visual_xgboost(x_train: list, y_train: list, x_valid: list, y_valid: list) -
     chart = fig.add_subplot(1, 1, 1)
     # series의 기존 인덱스가 시각화에 불필요하므로 `.reset_index()`
     y_valid_reset_index = y_valid["전력사용량"].reset_index()["전력사용량"]
-    chart.plot(y_valid_reset_index[:-30], marker="o", color="blue", label="실제값")
+    chart.plot(y_valid_reset_index[:-30],
+               marker="o", color="blue", label="실제값")
     chart.plot(pred[:-30], marker="x", color="red", label="예측값")
     chart.set_title("XGBoost Predict", size=20)
 
@@ -64,18 +69,13 @@ def visual_xgboost(x_train: list, y_train: list, x_valid: list, y_valid: list) -
 # %%
 
 # 모델 및 예측결과 반환
-def run():
-    dataset = asos.run()
-    x_train, x_valid, y_train, y_valid = split_dataset(
-        dataset, testset_size=0.2, do_shuffle=False
-    )
+def run(BASEDIR_PATH, n_estimators, learning_rate, early_stopping_rounds, x_test: list):
 
-    # TEST
-    # xgb_reg, pred = train_xgboost(x_train, y_train, x_valid, y_valid)
-    # print("[Complete!]")
-    # print(pred)
+    # train dataset
+    dataset = load_dataset(BASEDIR_PATH)
 
-    return train_xgboost(x_train, y_train, x_valid, y_valid)
+    # hypter parameters
+    return train_xgboost(dataset, n_estimators, learning_rate, early_stopping_rounds, x_test)
 
 
 # %%
