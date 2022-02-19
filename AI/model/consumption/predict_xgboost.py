@@ -31,10 +31,10 @@ def train_xgboost(dataset: pd.DataFrame, x_test):
     # params
     params = {'booster':  ['gbtree', 'gblinear', 'dart'],
               'max_depth': [i for i in range(0, 20)],
-              'subsample': [i for i in range(0, 1, 0.1)],
+              'subsample': [i*0.1 for i in range(0, 11)],
               'learning_rate': [0.01, 0.05, 0.1],
-              'lambda': [i for i in range(0, 1, 0.1)],
-              'alpha': [i for i in range(0, 1, 0.1)],
+              'lambda': [i*0.1 for i in range(0, 11)],
+              'alpha': [i*0.1 for i in range(0, 11)],
               'n_estimators': [i for i in range(100, 3000, 100)]}
 
     # Fitting 5 folds for each of 54 candidates, totalling 270 fits
