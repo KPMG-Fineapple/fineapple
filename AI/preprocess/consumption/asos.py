@@ -73,7 +73,7 @@ class PreprocessASOS:
 
 
 def run(BASEDIR_PATH: str) -> pd.DataFrame:
-    SEOUL_PATH_108 = BASEDIR_PATH + "ASOS/seoul_day_108/"
+    SEOUL_PATH_108 = BASEDIR_PATH + "ASOS/train/seoul_day_108/"
 
     Weather_instance = WeatherASOS(SEOUL_PATH_108)
     df_asos = Weather_instance.concat_dataframes()
