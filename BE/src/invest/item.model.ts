@@ -14,4 +14,7 @@ export interface Item {
   companyInfo: Company;
   description: string;
   yield: Yield[];
+  totalFund: number;
+  profitPercent: number;
+  fundingPercent: number;
 }

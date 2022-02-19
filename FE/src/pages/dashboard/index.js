@@ -34,28 +34,28 @@ function Dashboard({
                 <Grid item lg={3} md={6} xl={3} xs={6}>
                   <DashboardCard
                     title="이번 달 총 발전량"
-                    content={430}
+                    content={"120kWh"}
                     icon={<BoltOutlinedIcon fontSize="large" />}
                   />
                 </Grid>
                 <Grid item lg={3} md={6} xl={3} xs={6}>
                   <DashboardCard
                     title="이번 달 총 소비량"
-                    content={430}
+                    content={"161kWh"}
                     icon={<AttachMoneyOutlinedIcon fontSize="large" />}
                   />
                 </Grid>
                 <Grid item lg={3} md={6} xl={3} xs={6}>
                   <DashboardCard
                     title="이번 달 총 전기료"
-                    content={430}
+                    content={"13,500원"}
                     icon={<BoltOutlinedIcon fontSize="large" />}
                   />
                 </Grid>
                 <Grid item lg={3} md={6} xl={3} xs={6}>
                   <DashboardCard
                     title="이번 달 총 발전수익"
-                    content={430}
+                    content={"1,600원"}
                     icon={<AttachMoneyOutlinedIcon fontSize="large" />}
                   />
                 </Grid>
@@ -65,14 +65,14 @@ function Dashboard({
                 <Grid item lg={6} md={6} xl={6} xs={6}>
                   <DashboardCard
                     title="절감 가능한 금액"
-                    content={430}
+                    content={"1,600원"}
                     icon={<AttachMoneyOutlinedIcon fontSize="large" />}
                   />
                 </Grid>
                 <Grid item lg={6} md={6} xl={6} xs={6}>
                   <DashboardCard
-                    title="이산화탄소 절감"
-                    content={430}
+                    title="탄소 중립 기여도"
+                    content={"설치 할 시 약 15% 상승합니다."}
                     icon={<AirOutlinedIcon fontSize="large" />}
                   />
                 </Grid>
@@ -137,8 +137,8 @@ const getMonthData = (consumptionResult, powerGenrationResult) => {
 
     return {
       name: `${date.substring(5, date.length)}월`,
-      현재: item,
-      예측: predictPowerGeneration[idx],
+      소비량: item,
+      발전량: predictPowerGeneration[idx],
     };
   });
 
@@ -152,8 +152,8 @@ const getDayData = (consumptionResult, powerGenrationResult) => {
   const data = predictConsumption.map((item, idx) => {
     return {
       name: `${idx + 1}일`,
-      현재: item,
-      예측: predictPowerGeneration[idx],
+      소비량: item,
+      발전량: predictPowerGeneration[idx],
     };
   });
 
