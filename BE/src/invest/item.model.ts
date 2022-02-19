@@ -1,5 +1,9 @@
 import { Company } from './company.model';
 
+interface Yield {
+  name: string;
+  수익률: number;
+}
 export interface Item {
   id: number;
   title: string;
@@ -9,4 +13,5 @@ export interface Item {
   investAmount: number;
   companyInfo: Company;
   description: string;
+  yield: Yield[];
 }

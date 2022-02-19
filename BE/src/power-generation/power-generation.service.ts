@@ -5,7 +5,7 @@ import { spawnSync } from 'child_process';
 export class PowerGenerationService {
   private logger = new Logger('PowerGenerationService');
 
-  getPowerGeneration(address: string) {
+  getPowerGeneration() {
     const process = spawnSync('python3', ['../AI/power-generation-model.py']);
     const result = JSON.parse(
       Buffer.from(process.stdout.toJSON().data).toString(),

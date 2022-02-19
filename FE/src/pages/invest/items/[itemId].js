@@ -50,9 +50,6 @@ function Item({ item, powerGenrationResult }) {
                 <Typography align="center" variant="subtitle2">
                   {item.investorNumber.toLocaleString("ko-KR")}명 참여
                 </Typography>
-                <Typography align="center" variant="h6" color="primary">
-                  {item.price.toLocaleString("ko-KR")}원
-                </Typography>
               </Box>
               <Divider
                 sx={{
@@ -86,7 +83,13 @@ function Item({ item, powerGenrationResult }) {
           <Grid item lg={6} md={6} xl={6} xs={12}>
             <InvestAccordions
               title="더 많은 투자 정보"
-              items={["생산성", "투자 방식"]}
+              items={[
+                { title: "설비 용량", description: "6.5 MW" },
+                {
+                  title: "총 투자금 / 투자 기간",
+                  description: "5.6억 / 2022년 2월 ~ 8월",
+                },
+              ]}
             />
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
@@ -94,17 +97,13 @@ function Item({ item, powerGenrationResult }) {
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
             <Chart
-              title="현재 발전량"
+              title="예상 발전량"
               allowtoggle="off"
               result={powerGenrationResult}
             />
           </Grid>
           <Grid item lg={6} md={6} xl={6} xs={12}>
-            <Chart
-              title="예상 수익률"
-              allowtoggle="off"
-              result={powerGenrationResult}
-            />
+            <Chart title="예상 수익" allowtoggle="off" result={item.yield} />
           </Grid>
         </Grid>
       </Container>
@@ -116,26 +115,31 @@ Item.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Item;
 
+const createCurrentGenration = (powerGenration) => {
+  return powerGenration.map((item, idx) => {
+    const { date } = item;
+    return {
+      name: `${date.substring(5, date.length)}월`,
+      발전량: powerGenration[idx].value.reduce((acc, cur) => acc + cur),
+    };
+  });
+};
+
 export async function getServerSideProps({ params: { itemId } }) {
   const item = await (
     await fetch(`http://localhost:3001/api/invest/items/${itemId}`)
   ).json();
 
   const powerGenrationResult = await (
-    await fetch(
-      `http://localhost:3001/api/predict/power-generation?address=hihi`
-    )
-  ).json();
-
-  const consumptionResult = await (
-    await fetch(`http://localhost:3001/api/predict/consumption?address=hihi`)
+    await fetch(`http://localhost:3001/api/predict/power-generation`)
   ).json();
 
   return {
     props: {
       item,
-      powerGenrationResult,
-      consumptionResult,
+      powerGenrationResult: createCurrentGenration(
+        powerGenrationResult.predict
+      ),
     },
   };
 }
