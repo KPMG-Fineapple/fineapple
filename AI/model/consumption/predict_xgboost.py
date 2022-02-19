@@ -20,14 +20,14 @@ def split_dataset(dataset: pd.DataFrame, testset_size: float, do_shuffle: bool):
     return train_test_split(df_x, df_y, test_size=testset_size, shuffle=do_shuffle)
 
 
-def train_xgboost(dataset: pd.DataFrame, n_estimators, learning_rate, early_stopping_rounds, x_test: list) -> tuple:
+def train_xgboost(dataset: pd.DataFrame, params_n_estimators, params_learning_rate, params_early_stopping_rounds, x_test) -> tuple:
     # training set
-    x_train, y_train, x_valid, y_valid = split_dataset(
+    x_train, x_valid, y_train, y_valid = split_dataset(
         dataset, testset_size=0.2, do_shuffle=False)
 
     # model
-    xgb_reg = XGBRegressor(n_estimators=n_estimators,
-                           learning_rate=learning_rate,
+    xgb_reg = XGBRegressor(n_estimators=params_n_estimators,
+                           learning_rate=params_learning_rate,
                            seed=0)
 
     # train
@@ -35,10 +35,11 @@ def train_xgboost(dataset: pd.DataFrame, n_estimators, learning_rate, early_stop
         x_train,
         y_train,
         eval_set=[(x_train, y_train), (x_valid, y_valid)],
-        early_stopping_rounds=early_stopping_rounds,
+        early_stopping_rounds=params_early_stopping_rounds,
         verbose=False,
     )
 
+    x_test.drop("일시", axis=1, inplace=True)   # 학습에서 '일시' 사용하지 않으므로 drop
     pred = xgb_reg.predict(x_test)
     pred = pd.Series(pred)
     return xgb_reg, pred
@@ -69,7 +70,7 @@ def visual_xgboost(x_train: list, y_train: list, x_valid: list, y_valid: list) -
 # %%
 
 # 모델 및 예측결과 반환
-def run(BASEDIR_PATH, n_estimators, learning_rate, early_stopping_rounds, x_test: list):
+def run(BASEDIR_PATH, n_estimators, learning_rate, early_stopping_rounds, x_test):
 
     # train dataset
     dataset = load_dataset(BASEDIR_PATH)

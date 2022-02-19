@@ -101,8 +101,36 @@ def run(BASEDIR_PATH: str) -> pd.DataFrame:
 
 # %%
 
+def preprocess_test(BASEDIR_PATH: str) -> pd.DataFrame:
+    PREDICT_PATH = BASEDIR_PATH + "ASOS/test/seoul_day_108/"
+    Weather_instance = WeatherASOS(PREDICT_PATH)
+    df_asos = Weather_instance.concat_dataframes()
+    Preprocessed_instance = PreprocessASOS(PREDICT_PATH)
+
+    # run
+    col_names = [
+        "일시",
+        "평균기온(°C)",
+        "최저기온(°C)",
+        "평균 상대습도(%)",
+        "평균 증기압(hPa)",
+        "평균 중하층운량(1/10)",
+        "최저 초상온도(°C)",
+        "1.5m 지중온도(°C)",
+    ]
+    df_simple = Preprocessed_instance.pick_columns(col_names, df_asos)
+    df_added_comfort = Preprocessed_instance.add_comfort_information(
+        df_simple, ta_column="평균기온(°C)", rh_column="평균 상대습도(%)",
+    )
+    df_preprocessed = Preprocessed_instance.drop_columns(df_added_comfort)
+
+    return df_preprocessed
+# %%
+
+
 if __name__ == "__main__":
-    df = run("../../data/")
+    # df = run("../../data/")
+    df = preprocess_test("../../data/")
     df.info()
 
     # <class 'pandas.core.frame.DataFrame'>
