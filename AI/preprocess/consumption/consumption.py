@@ -63,15 +63,35 @@ class UserConsumption:
             df = pd.concat([df, df_2], ignore_index=True)
         return df
 
+# %%
+# run
+
+
+def run(BASEDR_PATH: str) -> pd.DataFrame:
+    USER_PATH = BASEDR_PATH + "private/Powerconsumption/"
+    Consumption_instance = UserConsumption(USER_PATH)
+
+    df_preprocessed = Consumption_instance.concat_dataframes()
+    return df_preprocessed
 
 # %%
 
-# TEST_PATH = ""
-# User = UserConsumption(
-#     "../data/private/PowerConsumption/"
-# )  # prophet.py 파일 기준으로 상대경로 입력
-# user_consumption = User.concat_dataframes()
-# user_consumption.info()
 
-# temp = User.load_data(TEST_PATH).info()
+if __name__ == "__main__":
+    df = run("../../data/")
+    df.info()
+
+    # <class 'pandas.core.frame.DataFrame'>
+    # RangeIndex: 1461 entries, 0 to 1460
+    # Data columns (total 6 columns):
+    # #   Column    Non-Null Count  Dtype
+    # ---  ------    --------------  -----
+    # 0   datetime  1461 non-null   datetime64[ns]
+    # 1   전기        1461 non-null   float64
+    # 2   수도        1461 non-null   float64
+    # 3   온수        1461 non-null   float64
+    # 4   가스        1461 non-null   float64
+    # 5   열량        1461 non-null   float64
+    # dtypes: datetime64[ns](1), float64(5)
+    # memory usage: 68.6 KB
 # %%
