@@ -26,7 +26,7 @@ function investDashboard(props) {
       >
         <Box sx={{ marginBottom: 8 }}>
           <Typography component="h1" variant="h4">
-            관심 있으신 투자처를 선택해주세요
+            관심 있는 발전소를 선택해주세요
           </Typography>
         </Box>
 
