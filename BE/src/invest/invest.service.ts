@@ -58,7 +58,7 @@ export class InvestService {
   private items: Item[] = [
     {
       id: 1,
-      title: '태양광 발전소 A 투자',
+      title: '김해 K 발전소',
       imageUrl: '/static/images/items/item1.jpeg',
       price: 58800,
       investAmount: 120302900,
@@ -72,10 +72,13 @@ export class InvestService {
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
       yield: yieldData,
+      totalFund: 5.6,
+      profitPercent: 17.4,
+      fundingPercent: 23,
     },
     {
       id: 2,
-      title: '태양광 발전소 B 투자',
+      title: '통영 B 발전소',
       imageUrl: '/static/images/items/item2.jpeg',
       price: 8800,
       investAmount: 10302900,
@@ -89,10 +92,13 @@ export class InvestService {
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
       yield: yieldData,
+      totalFund: 4.8,
+      profitPercent: 24.6,
+      fundingPercent: 23,
     },
     {
       id: 3,
-      title: '태양광 발전소 C 투자',
+      title: '평창 V 발전소',
       imageUrl: '/static/images/items/item3.png',
       price: 58800,
       investAmount: 120302900,
@@ -106,10 +112,13 @@ export class InvestService {
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
       yield: yieldData,
+      totalFund: 7.1,
+      profitPercent: 32.1,
+      fundingPercent: 23,
     },
     {
       id: 4,
-      title: '태양광 발전소 D 투자',
+      title: '나주 T 발전소',
       imageUrl: '/static/images/items/item4.jpeg',
       price: 58800,
       investAmount: 120302900,
@@ -123,10 +132,13 @@ export class InvestService {
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
       yield: yieldData,
+      totalFund: 2.7,
+      profitPercent: 28.4,
+      fundingPercent: 36,
     },
     {
       id: 5,
-      title: '태양광 발전소 E 투자',
+      title: '제주 A 발전소',
       imageUrl: '/static/images/items/item5.jpeg',
       price: 58800,
       investAmount: 120302900,
@@ -140,10 +152,13 @@ export class InvestService {
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
       yield: yieldData,
+      totalFund: 6.9,
+      profitPercent: 19.2,
+      fundingPercent: 57,
     },
     {
       id: 6,
-      title: '태양광 발전소 F 투자',
+      title: '고리 B 발전소',
       imageUrl: '/static/images/items/item6.jpeg',
       price: 58800,
       investAmount: 120302900,
@@ -157,6 +172,9 @@ export class InvestService {
       description:
         '국가는 과학기술의 혁신과 정보 및 인력의 개발을 통하여 국민경제의 발전에 노력하여야 한다.',
       yield: yieldData,
+      totalFund: 10.2,
+      profitPercent: 23.5,
+      fundingPercent: 83,
     },
   ];
 

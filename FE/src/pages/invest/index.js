@@ -38,7 +38,9 @@ function investDashboard(props) {
                 srcSet={`${item.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                 alt={item.title}
                 title={item.title}
-                description={item.description}
+                totalFund={item.totalFund}
+                profitPercent={item.profitPercent}
+                fundingPercent={item.fundingPercent}
                 id={item.id}
               />
             </Grid>

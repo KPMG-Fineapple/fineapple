@@ -14,7 +14,14 @@ const Img = styled("img")({
   maxHeight: "100%",
 });
 
-export default function Card({ imgURL, title, description, id }) {
+export default function Card({
+  imgURL,
+  title,
+  totalFund,
+  profitPercent,
+  fundingPercent,
+  id,
+}) {
   const router = useRouter();
 
   return (
@@ -39,7 +46,9 @@ export default function Card({ imgURL, title, description, id }) {
                 {title}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {description}
+                총 펀딩 금액: {totalFund}억 원 <br />
+                예상 수익률: {profitPercent}% <br />
+                펀딩률: {fundingPercent}%
               </Typography>
             </Grid>
             <Grid item sx={{ marginLeft: 4 }}>
