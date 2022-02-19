@@ -1,4 +1,5 @@
 # %%
+import matplotlib.pyplot as plt
 from model.consumption import predict_xgboost
 from preprocess.consumption import user_consumption  # UserConsumption
 from preprocess.consumption import weather_asos  # preprocess_test
@@ -25,23 +26,30 @@ def load_current(BASEDIR_PATH: str) -> list:
 
 def load_predict(BASEDIR_PATH: str) -> list:
     # -- predict -- #
-    n_estimators = 5
-    learning_rate = 0.001
-    early_stopping_rounds = 300
-    x_test: list = weather_asos.preprocess_test(BASEDIR_PATH)
-
-    _, predicted = predict_xgboost.run(
-        BASEDIR_PATH,
-        n_estimators, learning_rate, early_stopping_rounds,
-        x_test)
+    x_test = weather_asos.preprocess_test(BASEDIR_PATH)
+    _, predicted = predict_xgboost.run(BASEDIR_PATH, x_test)
 
     predicted_list: list = predicted.tolist()
     return predicted_list
 
-
 # %%
+
+
+def load_2021(BASEDIR_PATH: str) -> list:
+    # -- current -- #
+    PATH = BASEDIR_PATH + "private/PowerConsumption/test/"
+    Consumption_instance = user_consumption.UserConsumption(PATH)
+    current: pd.DataFrame = Consumption_instance.load_data(
+        # 2021
+        PATH + "세대별 기간별(107-2201 2021년01월01일 ∼2021년12월31일).xls"
+    )
+    y_valid = current["전기"]
+    return y_valid
+# %%
+
+
 def predict_consumption():
-    BASEDIR_PATH = "../AI/data/"
+    BASEDIR_PATH = "data/"
     current_list = load_current(BASEDIR_PATH)
     predict_list = load_predict(BASEDIR_PATH)
 
@@ -77,10 +85,17 @@ def predict_consumption():
     }
     print(json.dumps(consumption))
 
+    # --- Visualization ---
+    # y_valid = load_2021(BASEDIR_PATH)
+    # pred = pd.Series(predict_list)
+    # predict_xgboost.visual_xgboost(y_valid, pred)
+
 
 # %%
 
 if __name__ == "__main__":
     predict_consumption()
+
+# %%
 
 # %%

@@ -1,13 +1,16 @@
 # %%
 # load library
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 from xgboost import XGBRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
 
 # modules
+from preprocess.consumption.user_consumption import UserConsumption
 from preprocess.consumption.run import run as load_dataset
 
 # %%
@@ -20,22 +23,42 @@ def split_dataset(dataset: pd.DataFrame, testset_size: float, do_shuffle: bool):
     return train_test_split(df_x, df_y, test_size=testset_size, shuffle=do_shuffle)
 
 
-def train_xgboost(dataset: pd.DataFrame, params_n_estimators, params_learning_rate, params_early_stopping_rounds, x_test) -> tuple:
+def train_xgboost(dataset: pd.DataFrame, x_test):
     # training set
     x_train, x_valid, y_train, y_valid = split_dataset(
         dataset, testset_size=0.2, do_shuffle=False)
 
+    # params
+    params = {'max_depth': [3, 6, 10],
+              'learning_rate': [0.01, 0.05, 0.1],
+              'n_estimators': [100, 500, 1000],
+              'colsample_bytree': [0.3, 0.7]}
+
+    # Fitting 5 folds for each of 54 candidates, totalling 270 fits
+    # Best parameters: {'colsample_bytree': 0.3, 'learning_rate': 0.05, 'max_depth': 3, 'n_estimators': 100}
+    # Lowest RMSE:  7.0607787236388955
+
     # model
-    xgb_reg = XGBRegressor(n_estimators=params_n_estimators,
-                           learning_rate=params_learning_rate,
-                           seed=0)
+    xgb_reg = XGBRegressor(seed=0)
+
+    # Grid Search CV
+    # clf = GridSearchCV(estimator=xgb_reg,
+    #                    param_grid=params,
+    #                    scoring='neg_mean_squared_error',
+    #                    verbose=1)
+    # clf.fit(x_train, y_train)
+    # print("Best parameters:", clf.best_params_)
+    print("Lowest RMSE: ", (-clf.best_score_)**(1/2.0))
 
     # train
     xgb_reg.fit(
         x_train,
         y_train,
+        colsample_bytree=0.3,
+        learning_rate=0.05,
+        max_depth=3,
+        n_estimators=100,
         eval_set=[(x_train, y_train), (x_valid, y_valid)],
-        early_stopping_rounds=params_early_stopping_rounds,
         verbose=False,
     )
 
@@ -47,36 +70,21 @@ def train_xgboost(dataset: pd.DataFrame, params_n_estimators, params_learning_ra
 # %%
 
 
-def visual_xgboost(x_train: list, y_train: list, x_valid: list, y_valid: list) -> None:
-
-    # load model, pred result
-    # 함수에 입력한 dataset에 따라 train 후 모델과 예측값을 시각화 (plt)
-    xgb_reg, pred = train_xgboost(x_train, y_train, x_valid, y_valid)
-
-    # visualization
+def visual_xgboost(y_valid, pred) -> None:
     fig = plt.figure(figsize=(12, 4))
     chart = fig.add_subplot(1, 1, 1)
-    # series의 기존 인덱스가 시각화에 불필요하므로 `.reset_index()`
-    y_valid_reset_index = y_valid["전력사용량"].reset_index()["전력사용량"]
-    chart.plot(y_valid_reset_index[:-30],
-               marker="o", color="blue", label="실제값")
-    chart.plot(pred[:-30], marker="x", color="red", label="예측값")
+    chart.plot(y_valid, marker="o", color="blue", label="실제값")
+    chart.plot(pred, marker="x", color="red", label="예측값")
     chart.set_title("XGBoost Predict", size=20)
-
-    # best iteration
-    print("best iterations: {}".format(xgb_reg.best_iteration))
 
 
 # %%
 
 # 모델 및 예측결과 반환
-def run(BASEDIR_PATH, n_estimators, learning_rate, early_stopping_rounds, x_test):
+def run(BASEDIR_PATH, x_test):
 
     # train dataset
     dataset = load_dataset(BASEDIR_PATH)
 
     # hypter parameters
-    return train_xgboost(dataset, n_estimators, learning_rate, early_stopping_rounds, x_test)
-
-
-# %%
+    return train_xgboost(dataset, x_test)
