@@ -66,12 +66,12 @@ class UserConsumption:
 
 # %%
 
-TEST_PATH = ""
-User = UserConsumption(
-    "../data/private/PowerConsumption/"
-)  # prophet.py 파일 기준으로 상대경로 입력
-user_consumption = User.concat_dataframes()
-user_consumption.info()
+# TEST_PATH = ""
+# User = UserConsumption(
+#     "../data/private/PowerConsumption/"
+# )  # prophet.py 파일 기준으로 상대경로 입력
+# user_consumption = User.concat_dataframes()
+# user_consumption.info()
 
 # temp = User.load_data(TEST_PATH).info()
 # %%
