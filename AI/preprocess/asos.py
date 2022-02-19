@@ -41,8 +41,8 @@ class WeatherASOS:
 
 class PreprocessASOS:
     def __init__(self, ASOS_PATH: str, USER_PATH: str):
-        self.ASOS_PATH = ASOS_PATH  # "../data/~" -> "/data/ASOS/seoul_day_108/"
-        self.USER_PATH = USER_PATH  # '../data/~' -> "/data/private/PowerConsumption/"
+        self.ASOS_PATH = ASOS_PATH  # "../data/~" -> "AI/data/ASOS/seoul_day_108/"
+        self.USER_PATH = USER_PATH  # '../data/~' -> "AI/data/private/PowerConsumption/"
 
     def pick_columns(self, col_names: list, df_asos: pd.DataFrame) -> pd.DataFrame:
         df_simple = df_asos[col_names]
@@ -55,7 +55,8 @@ class PreprocessASOS:
         # y value: 전기 소비량 추가
         temp_df["전력사용량"] = df_consumption["전기"]
         # 생각이상으로 수도, 온수 사용량과 관계가 큰 것으로 보임 (상관관계 확인결과)
-        other_consumption = df_consumption.copy().drop(["datetime", "전기"], axis=1)
+        other_consumption = df_consumption.copy().drop(
+            ["datetime", "전기"], axis=1)
         df_combined = pd.concat([temp_df, other_consumption], axis=1)
         return df_combined
 
@@ -82,9 +83,9 @@ class PreprocessASOS:
 
 
 def run() -> pd.DataFrame:
-    # consumption-xgboost에서 돌리므로 경로는 해당파일 기준으로 작성
-    SEOUL_PATH_108 = "data/ASOS/seoul_day_108/"
-    USER_PATH = "data/private/PowerConsumption/"
+    # 프로젝트 절대경로로 변경
+    SEOUL_PATH_108 = "../AI/data/ASOS/seoul_day_108/"
+    USER_PATH = "../AI/data/private/PowerConsumption/"
 
     Weather_instance = WeatherASOS(SEOUL_PATH_108)
     df_asos = Weather_instance.concat_dataframes()
