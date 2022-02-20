@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { Box, Divider, Drawer, Typography, useMediaQuery } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import { ChartBar as ChartBarIcon } from "../icons/chart-bar";
 
 import { NavItem } from "./nav-item";
@@ -25,6 +26,11 @@ const items = [
     href: "/invest",
     icon: <AttachMoneyIcon fontSize="small" />,
     title: "Investment",
+  },
+  {
+    href: "/suggestion",
+    icon: <QuestionAnswerIcon fontSize="small" />,
+    title: "Suggestion",
   },
 ];
 

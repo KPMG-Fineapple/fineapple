@@ -98,8 +98,8 @@ def run(BASEDIR_PATH: str) -> pd.DataFrame:
 
     return df_preprocessed
 
-
 # %%
+
 
 def preprocess_test(BASEDIR_PATH: str) -> pd.DataFrame:
     PREDICT_PATH = BASEDIR_PATH + "ASOS/test/seoul_day_108/"

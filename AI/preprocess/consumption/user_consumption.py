@@ -67,8 +67,8 @@ class UserConsumption:
 # run
 
 
-def run(BASEDR_PATH: str) -> pd.DataFrame:
-    USER_PATH = BASEDR_PATH + "private/Powerconsumption/train/"
+def run(BASEDIR_PATH: str) -> pd.DataFrame:
+    USER_PATH = BASEDIR_PATH + "private/Powerconsumption/train/"
     Consumption_instance = UserConsumption(USER_PATH)
 
     df_preprocessed = Consumption_instance.concat_dataframes()

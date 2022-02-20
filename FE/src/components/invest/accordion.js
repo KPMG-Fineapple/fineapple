@@ -13,22 +13,18 @@ export function InvestAccordions(props) {
       <Typography align="left" variant="subtitle1" sx={{ mb: "20px" }}>
         {title}
       </Typography>
-      {items.map((item) => {
+      {items.map((item, idx) => {
         return (
-          <Accordion>
+          <Accordion key={idx}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>{item}</Typography>
+              <Typography>{item.title}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
+              <Typography>{item.description}</Typography>
             </AccordionDetails>
           </Accordion>
         );

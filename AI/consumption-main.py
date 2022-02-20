@@ -27,10 +27,10 @@ def load_current(BASEDIR_PATH: str) -> list:
 def load_predict(BASEDIR_PATH: str) -> list:
     # -- predict -- #
     x_test = weather_asos.preprocess_test(BASEDIR_PATH)
-    _, predicted = predict_xgboost.run(BASEDIR_PATH, x_test)
+    xgbr, predicted = predict_xgboost.run(BASEDIR_PATH, x_test)
 
     predicted_list: list = predicted.tolist()
-    return predicted_list
+    return xgbr, predicted_list
 
 # %%
 
@@ -49,24 +49,25 @@ def load_2021(BASEDIR_PATH: str) -> list:
 
 
 def predict_consumption():
-    BASEDIR_PATH = "data/"
+    BASEDIR_PATH = "../AI/data/"
     current_list = load_current(BASEDIR_PATH)
-    predict_list = load_predict(BASEDIR_PATH)
+    xgbr, predict_list = load_predict(BASEDIR_PATH)
 
     consumption = {
         "current": [
-            {"date": "2020.1", "value": current_list[0:31]},
-            {"date": "2020.2", "value": current_list[31:59]},
-            {"date": "2020.3", "value": current_list[59:90]},
-            {"date": "2020.4", "value": current_list[90:120]},
-            {"date": "2020.5", "value": current_list[120:151]},
-            {"date": "2020.6", "value": current_list[151:181]},
-            {"date": "2020.7", "value": current_list[181:212]},
-            {"date": "2020.8", "value": current_list[212:243]},
-            {"date": "2020.9", "value": current_list[243:273]},
-            {"date": "2020.10", "value": current_list[234:355]},
-            {"date": "2020.11", "value": current_list[355:355]},
-            {"date": "2020.12", "value": current_list[355:356]},
+            # 2020년 윤년
+            {"date": "2020.1", "value": current_list[0:30]},
+            {"date": "2020.2", "value": current_list[30:58]},
+            {"date": "2020.3", "value": current_list[58:89]},
+            {"date": "2020.4", "value": current_list[89:119]},
+            {"date": "2020.5", "value": current_list[119:150]},
+            {"date": "2020.6", "value": current_list[150:180]},
+            {"date": "2020.7", "value": current_list[180:211]},
+            {"date": "2020.8", "value": current_list[211:242]},
+            {"date": "2020.9", "value": current_list[242:272]},
+            {"date": "2020.10", "value": current_list[272:303]},
+            {"date": "2020.11", "value": current_list[303:333]},
+            {"date": "2020.12", "value": current_list[333:]},
         ],
         "predict": [
             {"date": "2021.1", "value": predict_list[0:31]},
@@ -86,9 +87,9 @@ def predict_consumption():
     print(json.dumps(consumption))
 
     # --- Visualization ---
-    # y_valid = load_2021(BASEDIR_PATH)
-    # pred = pd.Series(predict_list)
-    # predict_xgboost.visual_xgboost(y_valid, pred)
+    y_valid = load_2021(BASEDIR_PATH)
+    pred = pd.Series(predict_list)
+    predict_xgboost.visual_xgboost(y_valid, pred, xgbr)
 
 
 # %%

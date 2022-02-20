@@ -132,7 +132,7 @@ export default function Login({ updateLogin }) {
                 onClick={() =>
                   router.push({
                     pathname: "/dashboard",
-                    query: { isLogin: false },
+                    query: { isLogin: false, address: address },
                   })
                 }
               >
