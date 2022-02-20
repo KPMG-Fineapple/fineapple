@@ -4,11 +4,10 @@ import numpy as np
 import pandas as pd
 import torch
 
-from model.generation.predict_ann import end_to_end
 # import pandas as pd
 
 # from preprocess import power_generator
-# from model.power_generator import predict_ann
+from model.generation import predict_ann
 from preprocess.generation import run as generation_preprocess
 from sklearn.metrics import mean_squared_error
 
@@ -31,7 +30,7 @@ def load_predict(BASEDIR_PATH: str, m, std) -> list:
     X_torch = torch.tensor(X_test, dtype=torch.double)
 
     # -- predict -- #
-    predicted: torch.tensor = end_to_end(X_torch)
+    predicted: torch.tensor = predict_ann.end_to_end(X_torch)
 
     # -- undo norm -- #
     predicted_unnorm: np.ndarray = generation_preprocess.undo_norm(

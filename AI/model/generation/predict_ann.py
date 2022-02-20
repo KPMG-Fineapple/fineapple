@@ -156,5 +156,4 @@ if __name__ == "__main__":
     # model = Model3(name="logistic_regression",
     #                xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1.to(device)
     # model_save(model, x, y)
-
-    # %%
+    None
