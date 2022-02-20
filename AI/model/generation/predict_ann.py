@@ -24,10 +24,6 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 def prepare_data(x, y):
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-    # X_train = X_train.to(device)
-    # X_test = X_test.to(device)
-    # y_train = y_train.to(device)
-    # y_test = y_test.to(device)
     return X_train, y_train, X_test, y_test
 
 
@@ -137,15 +133,14 @@ def model_load(PATH="../AI/model/generation/ann_model_50k.pt"):
 # RUN
 
 
-def end_to_end():
+def end_to_end(X_test):
     x, y = load_npy()
-    X_train, y_train, X_test, y_test = prepare_data(x, y)
+    X_train, y_train, _, _ = prepare_data(x, y)
     model = Model3(name="logistic_regression",
                    xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1).to(device)
     model = model_load()
     print("[Complete] Model Load")
     predicted = predict(X_test, model)
-    print(type(predicted), predicted)
     return predicted
 
 
@@ -155,15 +150,11 @@ if __name__ == "__main__":
     # x, y = load_npy()
 
     # # model load
-    start = time.time()
-    result = end_to_end()
-    print(result)
-    # [load] time : 0.0028848648071289062
-    print("[load] time :", time.time() - start)
+    # result = end_to_end()
 
     # train
     # model = Model3(name="logistic_regression",
     #                xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1.to(device)
     # model_save(model, x, y)
 
-# %%
+    # %%
