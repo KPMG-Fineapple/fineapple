@@ -374,19 +374,12 @@ def preprocess(BASEDIR_PATH):
     # W_list_numpy.append(loc_7_w_21_n.to_numpy())
     x = np.concatenate((W_list_numpy), axis=0)
 
-    # TO CSV
-    np.save("power-generation-x", arr=x)
-    np.save("power-generation-y", arr=y)
-
-
-def load_npy():
-    npy_x = np.load(
-        file="AI/preprocess/power-generation/power-generation-x.npy")
-    npy_y = np.load(
-        file="AI/preprocess/power-generation/power-generation-y.npy")
-    x = torch.tensor(npy_x, dtype=float)
-    y = torch.tensor(npy_y, dtype=float)
-    return x, y
+    # ----- SAVE ------
+    # np.save("power-generation-x", arr=x)    # train
+    # np.save("power-generation-y", arr=y)    # train
+    np.save("W_list_numpy", arr=W_list_numpy)   # Weather list
+    # GenerationLoc_list_norm
+    np.save("GenerationLoc_list_norm", arr=GenerationLoc_list_norm)
 
 
 # %%
@@ -395,9 +388,9 @@ if __name__ == "__main__":
     preprocess("AI/data/")
     # [preprocess] time : 42.225852966308594
     print("[preprocess] time :", time.time() - start)
-    x, y = load_npy()
-    print(x)
-    print(y)
+    # x, y = load_npy()
+    # print(x)
+    # print(y)
 
 # %%
 
