@@ -8,7 +8,7 @@ export class ConsumptionService {
   async getConsumption() {
     const process = spawnSync('python3', ['../AI/consumption-main.py']);
     const str = Buffer.from(process.stdout.toJSON().data).toString();
-    const result = JSON.parse(str.substring(70, str.length));
+    const result = JSON.parse(str);
     return result;
   }
 }

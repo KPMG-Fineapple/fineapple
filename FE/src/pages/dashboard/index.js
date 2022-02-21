@@ -204,8 +204,8 @@ export async function getServerSideProps() {
     props: {
       //현재 소비량 발전량 비교
       currentResult: createCurrentResult(
-        consumptionResult.current[11],
-        powerGenrationResult.current[11]
+        consumptionResult.current[1],
+        powerGenrationResult.current[1]
       ),
       //전기세 예상 절약 수치
       estimatedElectricitySaving: createElectricitySaving(
