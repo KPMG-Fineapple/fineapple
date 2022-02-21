@@ -7,9 +7,9 @@ export class PowerGenerationService {
 
   getPowerGeneration() {
     const process = spawnSync('python3', ['../AI/power-generation-main.py']);
-    const result = JSON.parse(
-      Buffer.from(process.stdout.toJSON().data).toString(),
-    );
+    const str = Buffer.from(process.stdout.toJSON().data).toString();
+    this.logger.debug(str.substring(22, str.length));
+    const result = JSON.parse(str.substring(22, str.length));
     return result;
   }
 }
