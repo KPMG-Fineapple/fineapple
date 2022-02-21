@@ -47,8 +47,6 @@ def train_xgboost(dataset: pd.DataFrame, x_test):
         learning_rate=0.05,
         max_depth=3,
         n_estimators=100,
-        eval_set=[(x_train, y_train), (x_valid, y_valid)],
-        verbose=False,
         seed=0)
 
     # Grid Search CV
