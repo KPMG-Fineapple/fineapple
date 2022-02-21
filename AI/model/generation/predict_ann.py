@@ -14,8 +14,7 @@ import torch.functional as F
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 
-from preprocess import power_generator
-
+# from preprocess.generation import power_generator
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
@@ -24,28 +23,30 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
 def prepare_data(x, y):
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.1)
-    X_train = X_train.to(device)
-    X_test = X_test.to(device)
-    y_train = y_train.to(device)
-    y_test = y_test.to(device)
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
     return X_train, y_train, X_test, y_test
 
 
 # 모델
 
 
-class Model1(nn.Module):
-    def __init__(self, name="logistic_regression", xdim=9, hdim=13, ydim=1):
-        super(Model1, self).__init__()
+class Model3(nn.Module):
+    def __init__(self, name="3layer", xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1):
+        super(Model3, self).__init__()
         self.name = name
         self.xdim = xdim
-        self.hdim = hdim
+        self.h1dim = h1dim
+        self.h2dim = h2dim
+        self.h3dim = h3dim
         self.ydim = ydim
         self.linear1 = torch.nn.Linear(
-            self.xdim, self.hdim, dtype=float).to(device)
+            self.xdim, self.h1dim, dtype=float).to(device)
         self.linear2 = torch.nn.Linear(
-            self.hdim, self.ydim, dtype=float).to(device)
+            self.h1dim, self.h2dim, dtype=float).to(device)
+        self.linear3 = torch.nn.Linear(
+            self.h2dim, self.h3dim, dtype=float).to(device)
+        self.linear4 = torch.nn.Linear(
+            self.h3dim, self.ydim, dtype=float).to(device)
         self.init_param()
 
     def init_param(self):
@@ -53,12 +54,20 @@ class Model1(nn.Module):
         nn.init.zeros_(self.linear1.bias)
         nn.init.kaiming_normal_(self.linear2.weight)
         nn.init.zeros_(self.linear2.bias)
+        nn.init.kaiming_normal_(self.linear3.weight)
+        nn.init.zeros_(self.linear3.bias)
+        nn.init.kaiming_normal_(self.linear4.weight)
+        nn.init.zeros_(self.linear4.bias)
 
     def forward(self, x):
         net = x
         net = self.linear1(net)
         net = torch.relu(net)
-        outputs = self.linear2(net)
+        net = self.linear2(net)
+        net = torch.relu(net)
+        net = self.linear3(net)
+        net = torch.relu(net)
+        outputs = self.linear4(net)
         # outputs = torch.sigmoid(net)
         return outputs
 
@@ -69,7 +78,7 @@ def train_model(X_train, y_train, model):
     losses = []
     epochs = 50000
     criterion = torch.nn.MSELoss().to(device)
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
     losses_test = []
     Iterations = []
     iter = 0
@@ -92,22 +101,31 @@ def predict(X, model):
 # %%
 
 
+def load_npy():
+    npy_x = np.load(
+        file="../AI/preprocess/generation/power-generation-x.npy")
+    npy_y = np.load(
+        file="../AI/preprocess/generation/power-generation-y.npy")
+    x = torch.tensor(npy_x, dtype=float)
+    y = torch.tensor(npy_y, dtype=float)
+    return x, y
+
 # Model Save & Load
 # https://pytorch.org/tutorials/beginner/saving_loading_models.html#saving-loading-model-for-inference
 
 
-def model_save(model, x, y, PATH="AI/model/power_generator/ann_model.pt"):
+def model_save(model, x, y, PATH="../AI/model/generation/ann_model_50k.pt"):
     X_train, y_train, X_test, y_test = prepare_data(x, y)
     train_model(X_train, y_train, model)
     torch.save(model.state_dict(), PATH)
     print("[Complete] Model Save")
 
 
-def model_load(PATH="AI/model/power_generator/ann_model.pt"):
+def model_load(PATH="../AI/model/generation/ann_model_50k.pt"):
     # model = TheModelClass(*args, **kwargs)
-    model = Model1(name="logistic_regression",
-                   xdim=9, hdim=17, ydim=1).to(device)
-    model.load_state_dict(torch.load(PATH))
+    model = Model3(name="logistic_regression",
+                   xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1).to(device)
+    model.load_state_dict(torch.load(PATH, map_location='cpu'))
     model.eval()
     return model
 # %%
@@ -115,35 +133,27 @@ def model_load(PATH="AI/model/power_generator/ann_model.pt"):
 # RUN
 
 
-def end_to_end(x, y):
-    X_train, y_train, X_test, y_test = prepare_data(x, y)
-    model = Model1(name="logistic_regression",
-                   xdim=9, hdim=17, ydim=1).to(device)
+def end_to_end(X_test):
+    x, y = load_npy()
+    X_train, y_train, _, _ = prepare_data(x, y)
+    model = Model3(name="logistic_regression",
+                   xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1).to(device)
     model = model_load()
     print("[Complete] Model Load")
     predicted = predict(X_test, model)
-    print(type(predicted), predicted)
     return predicted
 
 
 # %%
 if __name__ == "__main__":
-    # preprocess에 시간이 너무 오래 걸리는 문제
-    start = time.time()
-    x, y = power_generator.generator_preprocess()
-    # [preprocess] time : 168.9127242565155
-    print("[preprocess] time :", time.time() - start)
+    # load_data
+    # x, y = load_npy()
 
-    # model load
-    start = time.time()
-    result = end_to_end(x, y)
-    print(result)
-    # [load] time : 0.0028848648071289062
-    print("[load] time :", time.time() - start)
+    # # model load
+    # result = end_to_end()
 
     # train
-    # model = Model1(name="logistic_regression",
-    #                xdim=9, hdim=17, ydim=1).to(device)
+    # model = Model3(name="logistic_regression",
+    #                xdim=9, h1dim=32, h2dim=16, h3dim=8, ydim=1.to(device)
     # model_save(model, x, y)
-
-# %%
+    None

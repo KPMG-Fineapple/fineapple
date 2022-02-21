@@ -1,5 +1,5 @@
 # private DATA
-**/private/
+# **/private/   
 
 # 사용하지 않는 모델, notebook 관리
 **/temp/
