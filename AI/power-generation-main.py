@@ -20,12 +20,11 @@ def load_current(BASEDIR_PATH: str) -> list:
     # -- current -- #
     PATH = BASEDIR_PATH
     df_gen_19, _ = generation_preprocess.load_generation()
-    m, std = generation_preprocess.find_m_s(df_gen_19)
     current_list: list = df_gen_19[0].tolist()
-    return current_list, m, std
+    return current_list
 
 
-def load_predict(BASEDIR_PATH: str, m, std) -> list:
+def load_predict(BASEDIR_PATH: str) -> list:
     X_test = generation_preprocess.load_w20().values.tolist()
     X_torch = torch.tensor(X_test, dtype=torch.double)
 
@@ -33,6 +32,8 @@ def load_predict(BASEDIR_PATH: str, m, std) -> list:
     predicted: torch.tensor = predict_ann.end_to_end(X_torch)
 
     # -- undo norm -- #
+    _, df_gen_20 = generation_preprocess.load_generation()
+    m, std = generation_preprocess.find_m_s(df_gen_20)
     predicted_unnorm: np.ndarray = generation_preprocess.undo_norm(
         m, std, predicted)
 
@@ -57,8 +58,8 @@ def loss(y, y_pred):
 
 def predict_power_generation():
     BASEDIR_PATH = "../AI/data/"
-    current_list, m, std = load_current(BASEDIR_PATH)
-    predict_list = load_predict(BASEDIR_PATH, m, std)
+    current_list = load_current(BASEDIR_PATH)
+    predict_list = load_predict(BASEDIR_PATH)
 
     generation = {
         "current": [
