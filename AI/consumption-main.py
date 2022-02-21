@@ -87,9 +87,9 @@ def predict_consumption():
     print(json.dumps(consumption))
 
     # --- Visualization ---
-    y_valid = load_2021(BASEDIR_PATH)
-    pred = pd.Series(predict_list)
-    predict_xgboost.visual_xgboost(y_valid, pred, xgbr)
+    # y_valid = load_2021(BASEDIR_PATH)
+    # pred = pd.Series(predict_list)
+    # predict_xgboost.visual_xgboost(y_valid, pred, xgbr)
 
 
 # %%

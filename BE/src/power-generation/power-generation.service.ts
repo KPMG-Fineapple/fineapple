@@ -6,10 +6,10 @@ export class PowerGenerationService {
   private logger = new Logger('PowerGenerationService');
 
   getPowerGeneration() {
-    const process = spawnSync('python3', ['../AI/power-generation-model.py']);
-    const result = JSON.parse(
-      Buffer.from(process.stdout.toJSON().data).toString(),
-    );
+    const process = spawnSync('python3', ['../AI/power-generation-main.py']);
+    const str = Buffer.from(process.stdout.toJSON().data).toString();
+    this.logger.debug(str.substring(22, str.length));
+    const result = JSON.parse(str.substring(22, str.length));
     return result;
   }
 }
