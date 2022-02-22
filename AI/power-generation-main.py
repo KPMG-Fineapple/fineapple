@@ -16,24 +16,25 @@ from sklearn.metrics import mean_squared_error
 # 2019
 
 
-def load_current(BASEDIR_PATH: str) -> list:
+def load_current() -> list:
     # -- current -- #
-    PATH = BASEDIR_PATH
     df_gen_19, _ = generation_preprocess.load_generation()
-    current_list: list = df_gen_19[0].tolist()
+    current_list: list = df_gen_19[0].abs().tolist()
     return current_list
 
 
-def load_predict(BASEDIR_PATH: str) -> list:
-    X_test = generation_preprocess.load_w20().values.tolist()
-    X_torch = torch.tensor(X_test, dtype=torch.double)
+def load_predict() -> list:
+    X_test: list = generation_preprocess.load_w20().values.tolist()   # time, normalized
+    X_torch: torch.tensor = torch.tensor(
+        X_test, dtype=torch.double)  # time, normalized
 
-    # -- predict -- #
+    # -- predict : by time -- #
     predicted: torch.tensor = predict_ann.end_to_end(X_torch)
+    df_predicted: pd.DataFrame = pd.DataFrame(
+        predicted.detach().numpy())
 
-    # -- undo norm -- #
-    _, df_gen_20 = generation_preprocess.load_generation()
-    m, std = generation_preprocess.find_m_s(df_gen_20)
+    # -- undo norm : by time -- #
+    m, std = generation_preprocess.find_m_s(df_predicted)
     predicted_unnorm: np.ndarray = generation_preprocess.undo_norm(
         m, std, predicted)
 
@@ -43,7 +44,6 @@ def load_predict(BASEDIR_PATH: str) -> list:
 
     # -- make it a list -- #
     predicted_list: list = predicted_by_day.tolist()
-
     return predicted_list
 
 
@@ -58,8 +58,8 @@ def loss(y, y_pred):
 
 def predict_power_generation():
     BASEDIR_PATH = "../AI/data/"
-    current_list = load_current(BASEDIR_PATH)
-    predict_list = load_predict(BASEDIR_PATH)
+    current_list = load_current()
+    predict_list = load_predict()
 
     generation = {
         "current": [

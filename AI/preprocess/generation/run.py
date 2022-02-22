@@ -69,7 +69,7 @@ def find_m_s(df):
 def undo_norm(m: float, s: float, predict: torch.tensor) -> np.ndarray:
     #predict = predict.detach().cpu()
     out = predict.detach().numpy()
-    out = predict * s
+    out = out * s
     out = out + m
     return out
 
