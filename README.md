@@ -26,7 +26,7 @@ fineapple은 사용과 투자의 진입 장벽이 높았던 태양광 발전 산
 
 fineapple의 서비스는 아래 링크에서 확인하실 수 있습니다.
 
-- [fineapple 배포링크](https://fineapple.nemne.dev)
+- ~[fineapple 배포링크](https://fineapple.nemne.dev)~ (배포중단)
 
 ## 서비스 상세
 
