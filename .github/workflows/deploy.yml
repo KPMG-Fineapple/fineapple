@@ -28,7 +28,7 @@ jobs:
             npm install
             npm run build
             pm2 delete server
-            npm run deploy
+            npm run deploy:reload
   deploy_2:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged
@@ -51,4 +51,4 @@ jobs:
             npm install
             npm run build
             pm2 delete client
-            npm run deploy
+            npm run deploy:reload
